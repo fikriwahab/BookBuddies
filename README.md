@@ -3,7 +3,7 @@
 - Farah Dhiya Ramadhina (2206082934)
 - Fikri Massaid Wahab (2206083395)
 - Gallan Adrizqi Samudra
-- Marchelina Anjani S
+- Marchelina Anjani S (2206082770)
 - Nabil Nazir Ahmad
 - Syarna Savitri
 ## Cerita Aplikasi
