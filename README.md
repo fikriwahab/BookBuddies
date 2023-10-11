@@ -30,8 +30,10 @@ Halaman ini digunakan oleh admin untuk mengelola akun dan statistik peminjaman b
 Halaman khusus bagi anggota untuk mereview tentang buku yang mereka baca, memberikan ulasan dan rating. (Farah Dhiya R)
 ### 6. Halaman Informasi Buku
 Halaman ini berisi informasi rinci tentang buku, termasuk deskripsi, ulasan, dan informasi peminjaman. (Marchelina Anjani S) 
-### 7. Halaman bookmark
+### 7. Halaman Bookmark
 Halaman ini digunakan bagi member untuk menyimpan buku yang sedang dipinjam oleh orang lain ke dalam daftar tunggu (waiting list) mereka. Untuk membookmark suatu buku member harus memasukkan data seperti nama dan kapan mereka ingin meminjam buku tersebut. (Syarna Savitri) 
+### 8. Halaman Rekomendasi Buku
+Halaman ini akan menampilkan buku terfavorit yang dinilai berdasarkan rata-rata rating tertinggi dalam rentan waktu satu bulan dan juga banyak peminjaman buku tersebut. List buku terfavorit tersebut nantinya akan ditampilkan sebagai rekomendasi buku pada bulan tersebut. (Gallan Adrizqi)
 
 ## Role Pengguna
 ### 1. Guest
