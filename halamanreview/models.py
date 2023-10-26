@@ -1,3 +1,7 @@
 from django.db import models
 
-# Create your models here.
+class Review(models.Model):
+    user_id = models.IntegerField()
+    book_id = models.IntegerField()
+    rating = models.IntegerField()
+    comment = models.TextField()
