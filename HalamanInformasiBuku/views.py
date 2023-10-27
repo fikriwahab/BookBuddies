@@ -14,11 +14,10 @@ def book_detail(request, book_id):
     book = get_object_or_404(Book, id=book_id)
     loan = Loan.objects.filter(book=book, user=request.user.id).first()
 
-    if request.is_ajax():
+    if request.method == "GET":
         data = {
             'book_title': book.title,
-            'book_author': book.author,
-            'book_description': book.description,
+            'book_author': book.authors,
             'loan_status': 'Dipinjam' if loan else 'Tersedia'
         }
         return JsonResponse(data)
