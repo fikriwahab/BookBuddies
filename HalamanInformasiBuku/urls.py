@@ -6,6 +6,5 @@ app_name = 'HalamanInformasiBuku'
 urlpatterns = [
     path('book/<int:book_id>/', book_detail, name='book_detail'),
     path('ajax/create_loan/<int:book_id>/', ajax_create_loan, name='ajax_create_loan'),
-    # URL untuk AJAX Read (membaca detail buku)
     path('ajax/read_book/<int:book_id>/', ajax_read_book, name='ajax_read_book'),
 ]

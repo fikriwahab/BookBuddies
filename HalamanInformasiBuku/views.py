@@ -12,7 +12,6 @@ def book_detail(request, book_id):
     loan = Loan.objects.filter(book=book, user=request.user).first()
 
     if request.is_ajax():
-        # Jika permintaan datang melalui AJAX, kembalikan data dalam format JSON
         data = {
             'book_title': book.title,
             'book_author': book.author,
@@ -29,7 +28,7 @@ def book_detail(request, book_id):
         }
         return render(request, 'book_detail.html', context)
 
-@csrf_exempt  # Hanya jika Anda ingin mengabaikan token CSRF dalam permintaan AJAX POST
+@csrf_exempt  
 def ajax_create_loan(request, book_id):
     if request.method == 'POST' and request.is_ajax():
         book = get_object_or_404(Book, id=book_id)
@@ -42,7 +41,7 @@ def ajax_create_loan(request, book_id):
             errors = form.errors
             return JsonResponse({'success': False, 'errors': errors})
 
-@csrf_exempt  # Hanya jika Anda ingin mengabaikan token CSRF dalam permintaan AJAX POST
+@csrf_exempt  
 def ajax_read_book(request, book_id):
     if request.is_ajax():
         book = get_object_or_404(Book, id=book_id)
