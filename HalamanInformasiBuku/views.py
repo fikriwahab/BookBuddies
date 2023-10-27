@@ -5,11 +5,14 @@ from django.contrib.auth.decorators import login_required
 from katalog.models import Book
 from HalamanInformasiBuku.models import Loan
 from HalamanInformasiBuku.forms import BorrowForm
+import csv
+from django.shortcuts import render
+from django.http import JsonResponse
+from katalog.models import Book
 
-@login_required
 def book_detail(request, book_id):
     book = get_object_or_404(Book, id=book_id)
-    loan = Loan.objects.filter(book=book, user=request.user).first()
+    loan = Loan.objects.filter(book=book, user=request.user.id).first()
 
     if request.is_ajax():
         data = {

@@ -13,6 +13,6 @@ class Book (models.Model):
     text_review_count = models.BigIntegerField(_("text review count"))
     publication_date = models.DateField(_("publication date"), auto_now=True)
     publisher = models.CharField(_("publisher"), max_length=150)
-
+    cover = models.ImageField(upload_to='covers/', null=True, blank=True)
 
 '%d/%m/%y' # '16/09/2006'

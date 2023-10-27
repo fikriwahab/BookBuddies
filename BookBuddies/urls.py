@@ -17,10 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('HalamanInformasiBuku.urls')),   
-    path('', include('katalog.urls')),
 
+urlpatterns = [
+    path('', include('katalog.urls')),  # Integrasikan katalog dengan URL utama
+    path('admin/', admin.site.urls),
+    path('detail/', include('HalamanInformasiBuku.urls')),  # Integrasikan HalamanInformasiBuku dengan URL utama
 ]
 
