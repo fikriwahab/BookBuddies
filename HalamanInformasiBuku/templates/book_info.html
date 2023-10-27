@@ -1,5 +1,5 @@
 <h1>{{ book.title }}</h1>
-<p>{{ book.author }}</p>
+<p>Pengarang: {{ book.author }}</p>
 <p>{{ book.description }}</p>
 
 {% if loan %}
@@ -19,15 +19,9 @@
   {% endfor %}
 </ul>
 
-<form method="post" action="{% url 'book_detail' book.id %}">
-  {% csrf_token %}
-  {{ form.text.label_tag }}
-  {{ form.text }}
-  <button type="submit">Tambah Ulasan</button>
-</form>
-
-<div id="borrow-form-container"></div>
-
+<div id="borrow-modal" style="display: none;">
+  <!-- Konten modal peminjaman di sini -->
+</div>
 
 <script>
     $('#borrow-book-button').click(function() {
@@ -53,5 +47,3 @@
         });
     });
 </script>
-
-
