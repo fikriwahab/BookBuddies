@@ -11,8 +11,12 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+<<<<<<< HEAD
 # import environ # Tambahkan kode berikut
 # import os # Tambahkan kode berikut
+=======
+import os
+>>>>>>> 93ab7fdfacd6541216ddc1761bd1daf927fecb8a
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -42,7 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'HalamanInformasiBuku',
     'halamanreview',
-
+    'katalog',
 ]
 
 MIDDLEWARE = [
@@ -60,7 +64,11 @@ ROOT_URLCONF = 'BookBuddies.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+<<<<<<< HEAD
         'DIRS': [BASE_DIR / 'templates'],
+=======
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+>>>>>>> 93ab7fdfacd6541216ddc1761bd1daf927fecb8a
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

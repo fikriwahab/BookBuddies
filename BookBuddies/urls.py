@@ -20,5 +20,7 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('HalamanInformasiBuku.urls')),   # Menggunakan nama aplikasi "HalamanInformasiBuku"
+    path('', include('katalog.urls')),
+
 ]
 
