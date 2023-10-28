@@ -1,52 +1,57 @@
 {% extends "base.html" %}
 {% block content %}
 <h1>{{ book.title }}</h1>
-<p>Pengarang: {{ book.author }}</p>
+<p>Pengarang: {{ book.authors }}</p>
 <p>{{ book.description }}</p>
 
 {% if loan %}
   <p>Status: Dipinjam</p>
-  <a href="{% url 'return_book' book.id %}">Kembalikan</a>
 {% else %}
   <p>Status: Tersedia</p>
-  <button id="borrow-book-button">Pinjam Buku</button>
+  <button id="review-button">Review</button>
   <button id="bookmark-button" data-bookid="{{ book.id }}">Bookmark</button>
-  <a href="{% url 'review' book.id %}" class="btn btn-success">Review</a>
+  <button id="borrow-button">Pinjam Buku</button>
+
+  <div id="borrow-modal" style="display: none;">
+    <form id="borrow-form">
+      {% csrf_token %}
+      <label for="due_date">Due Date:</label>
+      <input type="text" name="due_date" id="due_date">
+      <button type="submit">Pinjam</button>
+    </form>
+  </div>
 {% endif %}
 
-<h2>Ulasan</h2>
-<ul>
-  {% for review in reviews %}
-    <li>{{ review.text }}</li>
-  {% endfor %}
-</ul>
-
-<div id="borrow-modal" style="display: none;">
-  <!-- Konten modal peminjaman di sini -->
-</div>
-
 <script>
-    $('#borrow-book-button').click(function() {
-        $('#borrow-modal').show();
-    });
+  $('#review-button').click(function() {
+      // Handle review button click, e.g., open a modal for writing a review
+  });
 
-    // Saat form peminjaman disubmit, kirim data melalui AJAX
-    $('#borrow-form').submit(function(e) {
-        e.preventDefault();
-        $.ajax({
-            url: "{% url 'borrow_book' book.id %}",
-            type: 'post',
-            data: $('#borrow-form').serialize(),
-            dataType: 'json',
-            success: function(data) {
-                if (data.success) {
-                    $('#borrow-modal').hide();
-                    alert('Buku telah berhasil dipinjam.');
-                } else {
-                    alert('Terjadi kesalahan: ' + data.errors);
-                }
-            }
-        });
-    });
+  $('#bookmark-button').click(function() {
+      // Handle bookmark button click, e.g., bookmark the book
+  });
+
+  $('#borrow-button').click(function() {
+      $('#borrow-modal').show();
+  });
+
+  // When the form is submitted, send data via AJAX
+  $('#borrow-form').submit(function(e) {
+      e.preventDefault();
+      $.ajax({
+          url: "{% url 'create_loan' book.id %}",
+          type: 'post',
+          data: $('#borrow-form').serialize(),
+          dataType: 'json',
+          success: function(data) {
+              if (data.success) {
+                  $('#borrow-modal').hide();
+                  alert('Buku telah berhasil dipinjam.');
+              } else {
+                  alert('Terjadi kesalahan: ' + data.errors);
+              }
+          }
+      });
+  });
 </script>
 {% endblock %}
