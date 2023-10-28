@@ -94,22 +94,6 @@ def tambah_peminjam(request, book_id):
     return JsonResponse({'message': 'Permintaan tidak valid.'}, status=400)
 
 
-def show_xml(request):
-    data = Book.objects.all()
-    return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
-
-def show_json(request):
-    data = Book.objects.all()
-    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
-
-def show_xml_by_id(request, id):
-    data = Book.objects.filter(pk=id)
-    return HTTPResponse(serializers.serialize("xml", data), content_type="application/xml")
-
-def show_json_by_id(request, id):
-    data = Book.objects.filter(pk=id)
-    return HTTPResponse(serializers.serialize("json", data), content_type="application/json")
-
 def get_product_json(request):
     product_item = Book.objects.all()
     return HTTPResponse(serializers.serialize('json', product_item))

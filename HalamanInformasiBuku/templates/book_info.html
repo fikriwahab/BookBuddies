@@ -97,6 +97,7 @@
   <div class="book-cover">
     <img class="book-image" src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-S.jpg" alt="{{ book.title }}" />
   </div>
+
   <p>Pengarang: {{ book.authors }}</p>
   <p>Average Rating : {{book.average_rating}}</p>
   <p>ISBN : {{book.isbn}}</p>
@@ -130,7 +131,7 @@
             <input type="text" id="name" name="name" required>
           </div>
           <div class="mb-3">
-            <label for="due_date">Due Date:</label>
+            <label for="due_date">Tanggal Pengembalian:</label>
             <input type="text" name="due_date" id="due_date" required>
           </div>
           <div class="mb-3">
@@ -182,7 +183,7 @@
       function closePopupForm() {
         document.getElementById("close").style.display = "none";
       }
-    </script>
+      </script>
 
 
 </body>
