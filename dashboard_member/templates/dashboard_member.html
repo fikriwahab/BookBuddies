@@ -1,0 +1,12 @@
+<h1>Dashboard Member</h1>
+
+<h2>Pinjaman Buku Anda</h2>
+
+{% for activity in borrow_activities %}
+    <div>
+        <h3>{{ activity.book.title }}</h3>
+        <p>Tanggal Peminjaman: {{ activity.borrow_date }}</p>
+        <p>Tanggal Jatuh Tempo: {{ activity.due_date }}</p>
+        <p>Status: {% if activity.returned %}Dikembalikan{% else %}Dipinjam{% endif %}</p>
+    </div>
+{% endfor %}
