@@ -1,5 +1,5 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends "katalog_base.html" %}
+{% block katalog_content %}
 
 <style>
     .book-card {
@@ -27,6 +27,7 @@
     }
 </style>
 
+{% if user_profile.role == 'A' %}
 <div class="container"> <!-- Container Bootstrap -->
     <div class="row"> <!-- Row Bootstrap -->
 
@@ -47,4 +48,46 @@
     </div>
 </div>
 
+{% elif user_profile.role == 'M' %}
+<div class="container"> <!-- Container Bootstrap -->
+    <div class="row"> <!-- Row Bootstrap -->
+
+        {% for book in book_list %}
+        <div class="col-md-2"> <!-- Grid Bootstrap dengan lebar 2 dari 12 -->
+            <div class="book-card">
+                <a href="{% url 'HalamanInformasiBuku:book_detail' book.id %}">
+                    <div class="book-cover">
+                        <img class="book-image" src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-S.jpg" alt="{{ book.title }}" />
+                        <div class="book-title">{{ book.title }}</div>
+                    </div>
+                    <p style="color: #151347;">{{ book.publisher }}</p>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+{% else %}
+<div class="container"> <!-- Container Bootstrap -->
+    <div class="row"> <!-- Row Bootstrap -->
+
+        {% for book in book_list %}
+        <div class="col-md-2"> <!-- Grid Bootstrap dengan lebar 2 dari 12 -->
+            <div class="book-card">
+                <a href="{% url 'HalamanInformasiBuku:book_detail' book.id %}">
+                    <div class="book-cover">
+                        <img class="book-image" src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-S.jpg" alt="{{ book.title }}" />
+                        <div class="book-title">{{ book.title }}</div>
+                    </div>
+                    <p style="color: #151347;">{{ book.publisher }}</p>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+{% endif %}
 {% endblock %}

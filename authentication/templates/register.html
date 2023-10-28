@@ -1,0 +1,9 @@
+{% extends "katalog_base.html" %}
+{% block katalog_content %}
+<h2>Register as Member</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Register</button>
+</form>
+{% endblock %}
