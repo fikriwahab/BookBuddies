@@ -1,3 +1,4 @@
+from django.contrib.auth import logout
 from django.shortcuts import render
 from django.shortcuts import render
 from katalog.models import Book
@@ -6,6 +7,9 @@ from django.contrib.auth import login, authenticate
 from .models import UserProfile
 from django.shortcuts import render, redirect
 from .forms import CustomUserCreationForm
+from django.http import HttpResponseRedirect
+
+from django.urls import reverse
 #handling login semua user
 def register(request):
     if request.method == 'POST':
@@ -31,5 +35,6 @@ def user_login(request):
     return render(request, 'login.html', {'form': form})
 
 def logout_view(request):
-    # Logika untuk logout di sini
-    pass
+    logout(request)
+    response = HttpResponseRedirect(reverse('katalog:book_list'))
+    return response
