@@ -17,12 +17,15 @@ from django.http import HttpResponse
 from HalamanInformasiBuku.models import Loan
 import json
 
+from django.http import HttpResponseRedirect
+
 def book_detail(request, book_id):
     book = get_object_or_404(Book, id=book_id)
     loan = Loan.objects.filter(book=book, user=request.user.id).first()
 
     if request.method == "GET":
         data = {
+            'book_cover' : book.cover,
             'book_title': book.title,
             'book_author': book.authors,
             'average_rating': book.average_rating,
@@ -31,22 +34,24 @@ def book_detail(request, book_id):
             'language_code': book.language_code,
             'num_pages': book.num_pages,
             'ratings_count': book.ratings_count,
-            'text_review_count ': book.text_review_count ,
+            'text_review_count': book.text_review_count,
             'publication_date': book.publication_date,
             'publisher': book.publisher,
-
             'loan_status': 'Dipinjam' if loan else 'Tersedia'
         }
-        # return JsonResponse(data)
-        return render(request, 'book_info.html', data)
-    else:
-        form = BorrowForm()  # Initialize an empty form
-        context = {
-            'book': book,
-            'loan': loan,
-            'form': form,
-        }
-        return render(request, 'book_info.html', context)
+        return render(request, 'book_info.html', {'book': book})
+    elif request.method == "POST":
+        form = BorrowForm(request.POST)
+        if form.is_valid():
+            # Lakukan sesuatu dengan data yang diterima dari formulir
+            # Contoh: Simpan data atau lakukan operasi lain
+            # Redirect atau tampilkan kembali halaman detail buku setelah POST
+            return HttpResponseRedirect(request.path_info)  # Redirect ke halaman detail buku
+        else:
+            # Jika formulir tidak valid, tampilkan kembali halaman detail buku dengan pesan kesalahan
+            context = {'book': book, 'loan': loan, 'form': form}
+            return render(request, 'book_info.html', context)
+
 
 
 def is_book_available(book):
