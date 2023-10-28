@@ -4,6 +4,6 @@ from HalamanInformasiBuku.models import Loan
 class BorrowForm(forms.ModelForm):
     class Meta:
         model = Loan
-        fields = ['due_date']
+        fields = ['name', 'due_date', 'address']
 
 

@@ -15,7 +15,7 @@ from django.core import serializers
 from django.urls import reverse
 from django.http import HttpResponse
 from HalamanInformasiBuku.models import Loan
-
+import json
 
 def book_detail(request, book_id):
     book = get_object_or_404(Book, id=book_id)
@@ -26,9 +26,19 @@ def book_detail(request, book_id):
             'book_title': book.title,
             'book_author': book.authors,
             'average_rating': book.average_rating,
+            'isbn': book.isbn,
+            'isbn13': book.isbn13,
+            'language_code': book.language_code,
+            'num_pages': book.num_pages,
+            'ratings_count': book.ratings_count,
+            'text_review_count ': book.text_review_count ,
+            'publication_date': book.publication_date,
+            'publisher': book.publisher,
+
             'loan_status': 'Dipinjam' if loan else 'Tersedia'
         }
-        return JsonResponse(data)
+        # return JsonResponse(data)
+        return render(request, 'book_info.html', data)
     else:
         form = BorrowForm()  # Initialize an empty form
         context = {
@@ -38,35 +48,45 @@ def book_detail(request, book_id):
         }
         return render(request, 'book_info.html', context)
 
-@csrf_exempt
-def create_loan(request, book_id):
-    if request.method == 'POST':
-        # Ambil data dari POST request
-        name = request.POST.get("name")
-        due_date = request.POST.get("due_date")
-        book = get_object_or_404(Book, id=book_id)
-        
-        # Cek apakah buku tersedia
-        if is_book_available(book):
-            try:
-                # Tambahkan data peminjam ke dalam tabel Loan
-                Loan.objects.create(book=book, name=request.user, due_date=due_date)
-                return JsonResponse({'success': True, 'message': 'Peminjaman berhasil'})
-            except Exception as e:
-                return JsonResponse({'success': False, 'message': 'Error: ' + str(e)}, status=500)
-        else:
-            return JsonResponse({'success': False, 'message': 'Buku tidak tersedia untuk dipinjam'})
-    
-    return JsonResponse({'success': False, 'message': 'Invalid request method'}, status=405)
 
 def is_book_available(book):
-    # Cek apakah buku sudah memiliki peminjam (Loan) atau belum
+    # Fungsi untuk mengecek ketersediaan buku
     if Loan.objects.filter(book=book, returned=False).exists():
         return False  # Buku sudah dipinjam
-    # Cek apakah jumlah buku yang tersedia cukup
     if book.stock > 0:
         return True  # Buku tersedia
     return False  # Buku tidak tersedia
+
+@csrf_exempt
+def tambah_peminjam(request, book_id):
+    if request.method == 'POST':
+        received_data = json.loads(request.body)
+        
+        name = received_data.get('name')
+        due_date = received_data.get('due_date')
+        address = received_data.get('address')
+
+        try:
+            book = Book.objects.get(id=book_id)
+
+            # Memeriksa ketersediaan buku sebelum menambahkan peminjam
+            if not is_book_available(book):
+                return JsonResponse({'message': 'Buku tidak tersedia untuk dipinjam saat ini!'}, status=400)
+
+            peminjam_baru = Loan.objects.create(
+                book=book,
+                nama=name,
+                tanggal_pengembalian=due_date,
+                alamat=address
+            )
+            peminjam_baru.save()
+
+            return JsonResponse({'message': 'Peminjaman buku berhasil disimpan!'})
+
+        except Book.DoesNotExist:
+            return JsonResponse({'message': 'Buku tidak ditemukan!'}, status=404)
+
+    return JsonResponse({'message': 'Permintaan tidak valid.'}, status=400)
 
 
 def show_xml(request):
