@@ -3,7 +3,6 @@ from smtplib import SMTPResponseException
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.decorators import login_required
 from katalog.models import Book
 from HalamanInformasiBuku.models import Loan
 from HalamanInformasiBuku.forms import BorrowForm
@@ -15,6 +14,8 @@ from django.core import serializers
 from django.urls import reverse
 from django.http import HttpResponse
 from HalamanInformasiBuku.models import Loan
+from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 import json
 
 from django.http import HttpResponseRedirect
@@ -63,6 +64,7 @@ def is_book_available(book):
     return False  # Buku tidak tersedia
 
 @csrf_exempt
+@login_required
 def tambah_peminjam(request, book_id):
     if request.method == 'POST':
         received_data = json.loads(request.body)
@@ -93,7 +95,7 @@ def tambah_peminjam(request, book_id):
 
     return JsonResponse({'message': 'Permintaan tidak valid.'}, status=400)
 
-
+@staff_member_required
 def get_product_json(request):
     product_item = Book.objects.all()
     return HTTPResponse(serializers.serialize('json', product_item))
