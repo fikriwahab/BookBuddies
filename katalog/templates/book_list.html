@@ -1,12 +1,13 @@
 {% extends "katalog_base.html" %}
-{% block katalog_content %}
 
+{% block extra_styles %}
 <style>
     .book-card {
         border: 1px solid #e0e0e0;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         padding: 20px;
-        margin-bottom: 20px; /* ubah dari margin ke margin-bottom agar tidak ada spacing ekstra di atas card */
+        margin-bottom: 20px;
+        /* ubah dari margin ke margin-bottom agar tidak ada spacing ekstra di atas card */
         background-color: #fff;
         transition: transform 0.3s;
     }
@@ -21,73 +22,119 @@
         display: block;
     }
 
-    .book-category, .book-title {
+    .book-category,
+    .book-title {
         text-align: center;
         margin-top: 10px;
     }
+
+    .card {
+        transition: all ease-in 0.2s;
+        border-radius: 14px;
+        outline: 1px solid rgba(147, 147, 147, 0.4);
+        border: none;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+    }
+
+    .card:hover {
+        scale: 1.02;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    .line-clamp {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;  
+        overflow: hidden;
+    }
+
 </style>
-
-{% if user_profile.role == 'A' %}
-<div class="container"> <!-- Container Bootstrap -->
-    <div class="row"> <!-- Row Bootstrap -->
-
-        {% for book in book_list %}
-        <div class="col-md-2"> <!-- Grid Bootstrap dengan lebar 2 dari 12 -->
-            <div class="book-card">
-                <a href="{% url 'HalamanInformasiBuku:book_detail' book.id %}">
-                    <div class="book-cover">
-                        <img class="book-image" src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-S.jpg" alt="{{ book.title }}" />
-                        <div class="book-title">{{ book.title }}</div>
+{% endblock %}
+{% block navbar %}
+{% if user.is_authenticated %}
+    {% if user.is_admin %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">BookBuddies</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'recommended' %}">Recommended</a>
+                </li>
+                <!-- Dropdown for Admin Profile Here -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Profile
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{% url 'admin_dashboard' %}">Open Dashboard</a>
+                        <a class="dropdown-item" href="{% url 'katalog:logout' %}">Logout</a>
                     </div>
-                    <p style="color: #151347;">{{ book.publisher }}</p>
-                </a>
-            </div>
+                </li>
+            </ul>
         </div>
-        {% endfor %}
-
-    </div>
-</div>
-
-{% elif user_profile.role == 'M' %}
-<div class="container"> <!-- Container Bootstrap -->
-    <div class="row"> <!-- Row Bootstrap -->
-
-        {% for book in book_list %}
-        <div class="col-md-2"> <!-- Grid Bootstrap dengan lebar 2 dari 12 -->
-            <div class="book-card">
-                <a href="{% url 'HalamanInformasiBuku:book_detail' book.id %}">
-                    <div class="book-cover">
-                        <img class="book-image" src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-S.jpg" alt="{{ book.title }}" />
-                        <div class="book-title">{{ book.title }}</div>
-                    </div>
-                    <p style="color: #151347;">{{ book.publisher }}</p>
-                </a>
-            </div>
+    </nav>
+    {% else %}
+    <!-- Navbar for Members -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">BookBuddies</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'DashboardAdmin:profile' %}">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'katalog:login' %}">Logout</a>
+                </li>
+            </ul>
         </div>
-        {% endfor %}
-
-    </div>
-</div>
-
+    </nav>
+    {% endif %}
 {% else %}
-<div class="container"> <!-- Container Bootstrap -->
-    <div class="row"> <!-- Row Bootstrap -->
-
-        {% for book in book_list %}
-        <div class="col-md-2"> <!-- Grid Bootstrap dengan lebar 2 dari 12 -->
-            <div class="book-card">
-                <a href="{% url 'HalamanInformasiBuku:book_detail' book.id %}">
-                    <div class="book-cover">
-                        <img class="book-image" src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-S.jpg" alt="{{ book.title }}" />
-                        <div class="book-title">{{ book.title }}</div>
-                    </div>
-                    <p style="color: #151347;">{{ book.publisher }}</p>
-                </a>
-            </div>
+    <!-- Navbar for Guests -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">BookBuddies</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href=" {% url 'katalog:login' %} ">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'katalog:register' %}">Register</a>
+                </li>
+            </ul>
         </div>
-        {% endfor %}
-
-    </div>
-</div>
+    </nav>
 {% endif %}
 {% endblock %}
+
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">List of Books</h5>
+                    <ul class="list-group list-group-flush">
+                        {% for book in book_list %}
+                        <li class="list-group-item">
+                            <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-S.jpg" style="height: 250px; object-fit: cover;" />
+                            <a href=" {% url 'HalamanInformasiBuku:book_detail' book.id %} " data-authenticated="{% if user.is_authenticated %}true{% else %}false{% endif %}">{{ book.title }}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function showAlert() {
+        alert('Mohon login terlebih dahulu');
+    }
+</script>
+{% endblock scripts %}

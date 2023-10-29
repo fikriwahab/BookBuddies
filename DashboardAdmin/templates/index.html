@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<section class="mt-5">
+    <h1>Dashboard</h1>
+    <div class="row">
+        <div class="col-md-4 my-3">
+            <div class="card bg-danger rounded shadow text-white p-3 ">
+                <div class="d-flex justify-content-between align-items-center">
+                    <i class="bi bi-people-fill display-1 text-danger-emphasis"></i>
+                    <div class="text-end">
+                        <h1>
+                            0
+                        </h1>
+                        <h4>Members</h4>
+                    </div>
+                </div>
+                <div class="card-footer pb-0 pt-2 px-0">
+                    <a href="{% url 'DashboardAdmin:manage_member' %}" class="w-100 text-white d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-0">View Details</h6>
+                        </div>
+                        <i class="bi bi-arrow-right-circle fs-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 my-3">
+            <div class="card bg-success rounded shadow text-white p-3 ">
+                <div class="d-flex justify-content-between align-items-center">
+                    <i class="bi bi-book-half display-1 text-success-emphasis"></i>
+                    <div class="text-end">
+                        <h1>
+                            {{ book_count }}
+                        </h1>
+                        <h4>Books</h4>
+                    </div>
+                </div>
+                <div class="card-footer pb-0 pt-2 px-0">
+                    <a href="{% url 'DashboardAdmin:manage_book' %}" class="w-100 text-white d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-0">View Details</h6>
+                        </div>
+                        <i class="bi bi-arrow-right-circle fs-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 my-3">
+            <div class="card bg-primary rounded shadow text-white p-3 ">
+                <div class="d-flex justify-content-between align-items-center">
+                    <i class="bi bi-people-fill display-1 text-primary-emphasis"></i>
+                    <div class="text-end">
+                        <h1>
+                            0
+                        </h1>
+                        <h4>Something</h4>
+                    </div>
+                </div>
+                <div class="card-footer pb-0 pt-2 px-0">
+                    <a href="" class="w-100 text-white d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="mb-0">View Details</h6>
+                        </div>
+                        <i class="bi bi-arrow-right-circle fs-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+{% endblock content %}
