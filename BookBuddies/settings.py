@@ -44,8 +44,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'HalamanInformasiBuku',
     'katalog',
+<<<<<<< HEAD
     'DashboardAdmin',
     'bookmarks',
+=======
+>>>>>>> origin/dev
 ]
 
 MIDDLEWARE = [

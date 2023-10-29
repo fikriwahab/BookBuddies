@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <h1>Dashboard Member</h1>
+
+        <h2>Pinjaman Buku Anda</h2>
+
+        {% if borrow_activities %}
+            <div class="row">
+                {% for activity in borrow_activities %}
+                    <div class="col-md-4">
+                        <div class="borrowed-book">
+                            <img src="{{ activity.book.cover.url }}" alt="{{ activity.book.title }} cover" class="book-cover">
+                            <h3>{{ activity.book.title }}</h3>
+                            <p><strong>Tanggal Peminjaman:</strong> {{ activity.borrow_date }}</p>
+                            <p><strong>Tanggal Jatuh Tempo:</strong> {{ activity.due_date }}</p>
+                            <p><strong>Status:</strong> {% if activity.returned %}Dikembalikan{% else %}Dipinjam{% endif %}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>Tidak ada aktivitas peminjaman.</p>
+        {% endif %}
+    </div>
+{% endblock %}
