@@ -9,7 +9,7 @@ from halamanreview.views import show_xml_by_id
 app_name = 'halamanreview'
 
 urlpatterns = [
-    path('', show_review, name='show_review'),
+    path('book/<int:book_id>/', show_review, name='show_review'),
     path('create-review/', create_review, name='create_review'),
     path('xml/', show_xml, name='show_xml'), 
     path('json/', show_json, name='show_json'),

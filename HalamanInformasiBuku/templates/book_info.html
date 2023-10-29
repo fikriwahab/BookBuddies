@@ -201,7 +201,9 @@ https://templatemo.com/tm-569-edu-meeting
               {% if user.is_superuser %}
                 <!-- Bagian untuk admin -->
                 <div class="button-container" style="text-align: center;">
-                  <button id="review-button" data-bookid="{{ book.id }}" class="red-button">Review</button>
+                  <a href="{% url 'halamanreview:show_review' book.id %}">
+                    <button id="review-button" data-bookid="{{ book.id }}" class="red-button">Review</button>
+                  </a>
                   <button id="bookmark-button" data-bookid="{{ book.id }}" class="red-button">Bookmark</button>
                   <button id="view-members-button" data-bookid="{{ book.id }}" class="red-button">Lihat Member</button>
                 </div>
@@ -213,7 +215,9 @@ https://templatemo.com/tm-569-edu-meeting
                   <p>Status: Tersedia</p>
                 {% endif %}
                 <div class="button-container" style="text-align: center;">
-                  <button id="review-button" data-bookid="{{ book.id }}" class="red-button">Review</button>
+                  <a href="{% url 'halamanreview:show_review' book.id %}">
+                    <button id="review-button" data-bookid="{{ book.id }}" class="red-button">Review</button>
+                  </a>
                   <button id="bookmark-button" data-bookid="{{ book.id }}" class="red-button">Bookmark</button>
                   <button type="button" onclick="showPopupForm()" class="red-button">Pinjam</button>
                 </div>
