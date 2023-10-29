@@ -128,7 +128,10 @@ https://templatemo.com/tm-569-edu-meeting
       </div>
     </div>
   </div>
-
+{% block header %}
+{% if user.is_authenticated %}
+{% if user.is_admin %}
+<!-- ***** Admin ***** -->
   <!-- ***** Header Area Start ***** -->
   <header class="header-area header-sticky">
       <div class="container">
@@ -143,9 +146,8 @@ https://templatemo.com/tm-569-edu-meeting
                       <!-- ***** Menu Start ***** -->
                       <ul class="nav">
                           <li><a href="{% url 'katalog:book_list' %}">Home</a></li>
-                          <li><a href="#" class="active">BookMarked</a></li>
                           <li><a href="#">Recomended</a></li>
-                          <li><a href="#">Profile</a></li>
+                          <li><a href="{% url 'DashboardAdmin:profile' %}">Profile</a></li>
                       </ul>        
                       <a class='menu-trigger'>
                           <span>Menu</span>
@@ -157,7 +159,37 @@ https://templatemo.com/tm-569-edu-meeting
       </div>
   </header>
   <!-- ***** Header Area End ***** -->
-
+<!-- ***** Member ***** -->
+{% else %}
+<header class="header-area header-sticky">
+  <div class="container">
+      <div class="row">
+          <div class="col-12">
+              <nav class="main-nav">
+                  <!-- ***** Logo Start ***** -->
+                  <a href="index.html" class="logo">
+                      BookBuddies
+                  </a>
+                  <!-- ***** Logo End ***** -->
+                  <!-- ***** Menu Start ***** -->
+                  <ul class="nav">
+                      <li><a href="{% url 'katalog:book_list' %}">Home</a></li>
+                      <li><a href="#" class="active">BookMarked</a></li>
+                      <li><a href="#">Recomended</a></li>
+                      <li><a href="#">Profile</a></li>
+                  </ul>        
+                  <a class='menu-trigger'>
+                      <span>Menu</span>
+                  </a>
+                  <!-- ***** Menu End ***** -->
+              </nav>
+          </div>
+      </div>
+  </div>
+</header>
+{% endif %}
+{% endif %}
+{% endblock %}
   <section class="heading-page header-text" id="top">
     <div class="container">
       <div class="row">
