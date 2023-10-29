@@ -100,17 +100,29 @@ def get_product_json(request):
     product_item = Book.objects.all()
     return HTTPResponse(serializers.serialize('json', product_item))
 
-def get_json(request):
-    if request.user.is_superuser:  # Memeriksa apakah pengguna adalah admin
-        list = Book.objects.all()
-        updated_list = []
-        for member_peminjam in list:
-            peminjam = member_peminjam.user
-            peminjam_info = {
-                'peminjam_username': peminjam.username,
-                'donasi_detail': serializers.serialize("json", [member_peminjam])
-            }
-            updated_list.append(peminjam_info)
-        return HttpResponse(serializers.serialize("json", updated_list), content_type="application/json")
+def get_json(request, book_id):
+    if request.user.is_superuser:  
+        try:
+            book = Book.objects.get(pk=book_id)
+            borrowers = book.borrowers.all()
+            updated_list = []
+
+            for borrower in borrowers:
+                borrower_info = {
+                    'name': borrower.name,
+                    'due_date': borrower.due_date,
+                    'address': borrower.address,
+                }
+                updated_list.append(borrower_info)
+
+            return JsonResponse(updated_list, safe=False)
+        except Book.DoesNotExist:
+            return HttpResponse("Book not found", status=404)
     else:
-        return HttpResponse("Unauthorized", status=401)
+        return JsonResponse({"error": "Unauthorized"}, status=401)
+
+
+
+
+
+
