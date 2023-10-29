@@ -1,3 +1,4 @@
+from datetime import datetime
 from http.client import HTTPResponse
 from smtplib import SMTPResponseException
 from django.shortcuts import render, get_object_or_404
@@ -17,7 +18,7 @@ from HalamanInformasiBuku.models import Loan
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 import json
-from django.conf.urls.static import static
+
 
 from django.http import HttpResponseRedirect
 
@@ -56,11 +57,9 @@ def book_detail(request, book_id):
 
 def is_book_available(book):
     # Fungsi untuk mengecek ketersediaan buku
-    if Loan.objects.filter(book=book, returned=False).exists():
+    if Loan.objects.filter(book=book).exists():
         return False  # Buku sudah dipinjam
-    if book.stock > 0:
-        return True  # Buku tersedia
-    return False  # Buku tidak tersedia
+    return True  # Buku tidak tersedia
 
 @csrf_exempt
 @login_required
@@ -69,7 +68,7 @@ def tambah_peminjam(request, book_id):
         received_data = json.loads(request.body)
         
         name = received_data.get('name')
-        due_date = received_data.get('due_date')
+        due_date =  received_data.get('due_date')
         address = received_data.get('address')
 
         try:
@@ -81,9 +80,10 @@ def tambah_peminjam(request, book_id):
 
             peminjam_baru = Loan.objects.create(
                 book=book,
-                nama=name,
-                tanggal_pengembalian=due_date,
-                alamat=address
+                user=request.user,  # Sesuaikan ini dengan pengguna yang membuat peminjaman
+                name=received_data.get('name'),
+                due_date=received_data.get('due_date'),
+                address=received_data.get('address')
             )
             peminjam_baru.save()
 

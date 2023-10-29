@@ -299,6 +299,7 @@ https://templatemo.com/tm-569-edu-meeting
             .catch(error => {
               console.error('Error saving data:', error);
               alert('Terjadi kesalahan saat menyimpan data');
+              document.getElementById("ajax-form").reset();
             });
 
             return false;
