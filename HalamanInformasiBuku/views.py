@@ -20,6 +20,7 @@ import json
 
 from django.http import HttpResponseRedirect
 
+@login_required
 def book_detail(request, book_id):
     book = get_object_or_404(Book, id=book_id)
     loan = Loan.objects.filter(book=book, user=request.user.id).first()
