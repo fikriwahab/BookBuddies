@@ -292,45 +292,75 @@ https://templatemo.com/tm-569-edu-meeting
     <script src="{% static 'js/slick-slider.js' %}"></script>
     <script src="{% static 'js/custom.js' %}"></script>
     <script>
-        //according to loftblog tut
-        function addLoan() {
-          const name = document.getElementById('name').value;
-          const dueDate = document.getElementById('due_date').value;
-          const address = document.getElementById('address').value;
+      function addBookmark(bookId) {
+        // Lakukan permintaan Ajax untuk menambahkan buku ke bookmark
+        fetch('/add_bookmark/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken'),
+          },
+          body: JSON.stringify({ book_id: bookId }),
+        })
+        .then(response => {
+          if (response.ok) {
+            // Sukses menambahkan ke bookmark, ubah tombol menjadi "Bookmarked" dengan warna biru
+            const bookmarkButton = document.getElementById('bookmark-button');
+            bookmarkButton.innerText = "Bookmarked";
+            bookmarkButton.classList.add('blue-button');
+            bookmarkButton.disabled = true; // Optional: Menonaktifkan tombol setelah ditambahkan ke bookmark
+          } else {
+            // Gagal menambahkan ke bookmark, Anda dapat memberikan pesan kesalahan.
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          // Tangani kesalahan jaringan atau lainnya di sini.
+        });
+      }
+      
+      //according to loftblog tut
+      function addLoan() {
+        const name = document.getElementById('name').value;
+        const dueDate = document.getElementById('due_date').value;
+        const address = document.getElementById('address').value;
 
-          const data = {
-            name: name,
-            due_date: dueDate,
-            address: address,
-          };
+        const data = {
+          name: name,
+          due_date: dueDate,
+          address: address,
+        };
 
-          fetch("{% url 'HalamanInformasiBuku:tambah_peminjam' book.id %}", {
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: {
-              'Content-Type': 'application/json',
-              'X-CSRFToken': csrftoken
-            }
-          })
-            .then(response => {
-              if (response.ok) {
-                return response.json();
-              } else {
-                throw new Error('Gagal menyimpan data');
-              }
-            })
-            .then(data => {
-              alert('Data berhasil disimpan!');
-              document.getElementById("ajax-form").reset();
-              closePopupForm();
-            })
-            .catch(error => {
-              console.error('Error saving data:', error);
-              alert('Terjadi kesalahan saat menyimpan data');
-              document.getElementById("ajax-form").reset();
-            });
+        fetch("{% url 'HalamanInformasiBuku:tambah_peminjam' book.id %}", {
+          method: 'POST',
+          body: JSON.stringify(data),
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken
+          }
+        })
+            
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('Gagal menyimpan data');
+          }
+        })
+            
+        .then(data => {
+          alert('Data berhasil disimpan!');
+          document.getElementById("ajax-form").reset();
+          closePopupForm();
+        })
+            
+        .catch(error => {
+          console.error('Error saving data:', error);
+          alert('Terjadi kesalahan saat menyimpan data');
+          document.getElementById("ajax-form").reset();
+        });
 
-          return false;
+        return false;
         }
 
         function showMember(bookId) {
