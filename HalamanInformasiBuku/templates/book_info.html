@@ -248,6 +248,7 @@ https://templatemo.com/tm-569-edu-meeting
     <div class="container-popup">
       <form id="ajax-form" onsubmit="return addLoan();">
         <div class="mb-3">
+          {% csrf_token %}
           <h2>Form Pengisian Data</h2>
           <label for="name">Nama:</label>
           <input type="text" id="name" name="name" required class="form-control">
