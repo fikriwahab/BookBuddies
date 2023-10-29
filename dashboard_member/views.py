@@ -1,14 +1,15 @@
-from .models import BorrowActivity
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from .models import MemberLoanActivity
 
 @login_required
 def member_dashboard(request):
     user = request.user
-    borrow_activities = BorrowActivity.objects.filter(user=user)
-    
+    member_loans = MemberLoanActivity.objects.filter(user=user)
+
     context = {
         'user': user,
-        'borrow_activities': borrow_activities,
+        'member_loans': member_loans,
     }
-    return render(request, 'member_dashboard.html', context)
+
+    return render(request, 'dashboard_member/dashboard_member.html', context)
