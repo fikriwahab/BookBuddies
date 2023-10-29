@@ -50,7 +50,7 @@ def create_book(request):
 @login_required
 def manage_book(request):
     books = Book.objects.all()
-    return render(request, 'manage_book.html', {'book_list': books})
+    return render(request, 'add_deletebook.html', {'book_list': books})
 
 @login_required
 def delete_book(request, book_id):
