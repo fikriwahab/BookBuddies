@@ -1,0 +1,116 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<section class="mt-5">
+    <div class="mb-4 d-flex justify-content-between align-items-center">
+        <div>
+            <a href="{% url 'Dashboard_Member:dashboard' %}" class="btn btn-secondary d-flex justify-content-center align-items-center">
+                <i class="bi bi-chevron-left my-auto fs-6 me-2"></i>Back
+            </a>
+        </div>
+        <h1>Manage Book</h1>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between mb-3">
+                <div></div>
+                <a href="{% url 'Dashboard_Member:create_book' %}" class="btn btn-primary">
+                    <i class="bi bi-plus"></i> Add Book
+                </a>
+            </div>
+            <div class="table-responsive rounded">
+                <table class="table table-bordered table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>No.</th>
+                            <th>Image</th>
+                            <th>Title</th>
+                            <th>Publisher</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for book in book_list %}
+                        <tr id="bookRow{{book.id}}">
+                            <th>{{ forloop.counter }}</th>
+                            <td>
+                                {% if book.isbn %}
+                                <img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-S.jpg"
+                                    alt="{{ book.title }}" style="height: 100px; object-fit: cover;">
+                                {% else %}
+                                <img src="http://www.listercarterhomes.com/wp-content/uploads/2013/11/dummy-image-square.jpg"
+                                    alt="{{ book.title }}" style="height: 100px; object-fit: cover;">
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'HalamanInformasiBuku:book_detail' book.id %}"
+                                    class="text-decoration-none">
+                                    <div class="card-title fw-medium">{{ book.title }}</div>
+                                </a>
+                            </td>
+                            <td>{{ book.publisher }}</td>
+                            <td>
+
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                    data-bs-target="#confirmDeleteModal{{ forloop.counter0 }}">Delete</button>
+
+                                <div class="modal fade" id="confirmDeleteModal{{ forloop.counter0 }}" tabindex="-1"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">{{ book.title }}</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Are you sure you want to delete this book?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">No, Cancel</button>
+                                                <button type="button" class="btn btn-danger"
+                                                    data-bs-dismiss="modal" onclick="deleteBook('{{book.id}}')" data-book-id="{{ book.id }}">Yes, sure</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    $(document).ready(function () {
+
+    });
+    function deleteBook(bookId) {
+        $.ajax({
+            type: 'POST',
+            url: `{% url 'Dashboard_Member:delete_book' 123 %}`.replace('123', bookId), 
+            data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function (response) {
+                console.log(response);
+                if (response.success) {
+                    $(`#bookRow${bookId}`).remove();
+                    $('#confirmDeleteModal').modal('hide');
+                } else {
+
+                    console.log("error")
+                }
+            },
+            error: function (error) {
+                console.log(error)
+            }
+        });
+    }
+</script>
+
+{% endblock content %}
