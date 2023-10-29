@@ -227,7 +227,7 @@ https://templatemo.com/tm-569-edu-meeting
                 {% endif %}
                 <div class="button-container" style="text-align: center;">
                   <button id="review-button" data-bookid="{{ book.id }}" class="red-button">Review</button>
-                  <button id="bookmark-button" data-bookid="{{ book.id }}" class="red-button" >Bookmark</button>
+                  <button id="bookmark-button" on-click="HandleBookmarkButtonClick()" data-bookid="{{ book.id }}" class="red-button">Bookmark</button>
                   <button type="button" onclick="showPopupForm()" class="red-button">Pinjam</button>
                 </div>
               {% endif %}
@@ -463,38 +463,42 @@ https://templatemo.com/tm-569-edu-meeting
           }, 1000); 
         });
 
-        document.getElementById('bookmark-button').addEventListener('click', function () {
+        function handleBookmarkButtonClick() {
           console.log("Bookmark button clicked");
+    
           // Simpan referensi ke tombol
           var bookmarkButton = this;
-
+            
           // Mengambil ID buku dari atribut data-bookid
           const bookId = bookmarkButton.getAttribute('data-bookid');
-
+          
           // Lakukan permintaan Ajax untuk menyimpan buku ke bookmark
           fetch('/add_bookmark/', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'X-CSRFToken': getCookie('csrftoken'),
-            },
-            body: JSON.stringify({ book_id: bookId }),
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRFToken': getCookie('csrftoken'),
+              },
+              body: JSON.stringify({ book_id: bookId }),
           })
           .then(response => {
-            if (response.ok) {
-              // Sukses menambahkan ke bookmark, Anda dapat memberikan pesan sukses atau mengubah tampilan tombol jika diperlukan
-              bookmarkButton.innerText = "Bookmarked";
-              bookmarkButton.disabled = true; // Optional: Menonaktifkan tombol setelah ditambahkan ke bookmark
-            } else {
-              // Gagal menambahkan ke bookmark, Anda dapat memberikan pesan kesalahan.
-            }
+              if (response.ok) {
+                  // Sukses menambahkan ke bookmark, Anda dapat memberikan pesan sukses atau mengubah tampilan tombol jika diperlukan
+                  bookmarkButton.innerText = "Bookmarked";
+                  bookmarkButton.disabled = true; // Optional: Menonaktifkan tombol setelah ditambahkan ke bookmark
+              } else {
+                  // Gagal menambahkan ke bookmark, Anda dapat memberikan pesan kesalahan.
+              }
           })
           .catch(error => {
-            console.error('Error:', error);
-            // Tangani kesalahan jaringan atau lainnya di sini.
+              console.error('Error:', error);
+              // Tangani kesalahan jaringan atau lainnya di sini.
           });
-        });
+        }
+
+        document.getElementById('bookmark-button').addEventListener('click', handleBookmarkButtonClick);
+
     </script>
-  </body>
+</body>
 </body>
 </html>
