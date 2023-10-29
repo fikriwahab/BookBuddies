@@ -287,65 +287,71 @@ https://templatemo.com/tm-569-edu-meeting
           const address = document.getElementById('address').value;
 
           const data = {
-              name: name,
-              due_date: dueDate,
-              address: address,
-              
+            name: name,
+            due_date: dueDate,
+            address: address,
           };
 
           fetch("{% url 'HalamanInformasiBuku:tambah_peminjam' book.id %}", {
-              method: 'POST',
-              body: JSON.stringify(data),
-              headers: {
-                  'Content-Type': 'application/json',
-                  'X-CSRFToken': csrftoken // Menambahkan CSRF token ke header
-              }
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': csrftoken
+            }
           })
-          .then(response => {
-              if (!response.ok) {
-                  throw new Error('Data submission failed');
+            .then(response => {
+              if (response.ok) {
+                return response.json();
+              } else {
+                throw new Error('Gagal menyimpan data');
               }
-              return response.json();
-          })
-          .then(data => {
+            })
+            .then(data => {
               alert('Data berhasil disimpan!');
               document.getElementById("ajax-form").reset();
               closePopupForm();
-          })
-          .catch(error => {
+            })
+            .catch(error => {
               console.error('Error saving data:', error);
               alert('Terjadi kesalahan saat menyimpan data');
               document.getElementById("ajax-form").reset();
-          });
+            });
 
           return false;
-       }
+        }
 
-       function showMember(bookId) {
-        $("#card-container").empty();
-        $.ajax({
-          url: `./get_json/${bookId}`, 
-          dataType: 'json',
-          success: function (data) {
-            for (var i = 0; i < data.length; i++) {
-              var row = `<div class="col-4">
-                <div class="card text-center">
-                  <div class="card-body">
-                    <h4>${data[i].name}</h4>
-                    <p>Due Date: ${data[i].due_date}</p>
-                    <p>Address: ${data[i].address}</p>
+        function showMember(bookId) {
+          $("#card-container").empty();
+          $.ajax({
+            url: `{% url 'HalamanInformasiBuku:get_json' 0 %}`.replace('0', bookId), 
+            dataType: 'json',
+            success: function (data) {
+              for (var i = 0; i < data.length; i++) {
+                var row = `<div class="col-4">
+                  <div class="card text-center">
+                    <div class="card-body">
+                      <h4>${data[i].name}</h4>
+                      <p>Due Date: ${data[i].due_date}</p>
+                      <p>Address: ${data[i].address}</p>
+                    </div>
                   </div>
-                </div>
-              </div>`;
-              $('#card-container').append(row);
+                </div>`;
+                $('#card-container').append(row);
+              }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+              alert('Error: ' + textStatus + ' - ' + errorThrown);
             }
-          },
-          error: function(jqXHR, textStatus, errorThrown) {
-            alert('Error: ' + textStatus + ' - ' + errorThrown);
-          }
-        });
-      }
+          });
+        }
 
+        $(document).ready(function() {
+          $('#view-members-button').click(function() {
+            var bookId = $(this).data('bookid');
+            showMember(bookId);
+          });
+        });
 
         function showPopupForm() {
           document.getElementById("close").style.display = "block";
@@ -399,12 +405,6 @@ https://templatemo.com/tm-569-edu-meeting
           checkSection();
         });
 
-        $(document).ready(function() {
-          $('#view-members-button').click(function() {
-            var bookId = $(this).data('bookid');
-            showMember(bookId);
-          });
-        });
 
         document.getElementById('review-button').addEventListener('click', function() {
             this.classList.add('blue-button');
