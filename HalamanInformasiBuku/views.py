@@ -17,6 +17,7 @@ from HalamanInformasiBuku.models import Loan
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 import json
+from django.conf.urls.static import static
 
 from django.http import HttpResponseRedirect
 
@@ -32,9 +33,7 @@ def book_detail(request, book_id):
             'average_rating': book.average_rating,
             'isbn': book.isbn,
             'isbn13': book.isbn13,
-            'language_code': book.language_code,
             'num_pages': book.num_pages,
-            'ratings_count': book.ratings_count,
             'text_review_count': book.text_review_count,
             'publication_date': book.publication_date,
             'publisher': book.publisher,
@@ -95,7 +94,6 @@ def tambah_peminjam(request, book_id):
 
     return JsonResponse({'message': 'Permintaan tidak valid.'}, status=400)
 
-@staff_member_required
 def get_product_json(request):
     product_item = Book.objects.all()
     return HTTPResponse(serializers.serialize('json', product_item))
