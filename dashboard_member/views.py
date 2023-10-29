@@ -35,30 +35,3 @@ def sign_out(request):
     logout(request)
     return redirect('/')
 
-@login_required
-def create_book(request):
-    if request.method == 'POST':
-        form = BookForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('/')
-    else:
-        form = BookForm()
-
-    return render(request, 'create_book.html', {'form': form})
-
-@login_required
-def manage_book(request):
-    books = Book.objects.all()
-    return render(request, 'manage_book.html', {'book_list': books})
-
-@login_required
-def delete_book(request, book_id):
-    try:
-        book = get_object_or_404(Book, pk=book_id)
-        book.delete()
-        response = {'success': True}
-    except Book.DoesNotExist:
-        response = {'success': False, 'error_message': 'Book not found'}
-    return JsonResponse(response)
-
