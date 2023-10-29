@@ -1,3 +1,4 @@
+from datetime import datetime
 from http.client import HTTPResponse
 from smtplib import SMTPResponseException
 from django.shortcuts import render, get_object_or_404
@@ -18,6 +19,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 import json
 
+
 from django.http import HttpResponseRedirect
 
 @login_required
@@ -33,9 +35,7 @@ def book_detail(request, book_id):
             'average_rating': book.average_rating,
             'isbn': book.isbn,
             'isbn13': book.isbn13,
-            'language_code': book.language_code,
             'num_pages': book.num_pages,
-            'ratings_count': book.ratings_count,
             'text_review_count': book.text_review_count,
             'publication_date': book.publication_date,
             'publisher': book.publisher,
@@ -58,11 +58,9 @@ def book_detail(request, book_id):
 
 def is_book_available(book):
     # Fungsi untuk mengecek ketersediaan buku
-    if Loan.objects.filter(book=book, returned=False).exists():
+    if Loan.objects.filter(book=book).exists():
         return False  # Buku sudah dipinjam
-    if book.stock > 0:
-        return True  # Buku tersedia
-    return False  # Buku tidak tersedia
+    return True  # Buku tidak tersedia
 
 @csrf_exempt
 @login_required
@@ -71,7 +69,7 @@ def tambah_peminjam(request, book_id):
         received_data = json.loads(request.body)
         
         name = received_data.get('name')
-        due_date = received_data.get('due_date')
+        due_date =  received_data.get('due_date')
         address = received_data.get('address')
 
         try:
@@ -83,9 +81,10 @@ def tambah_peminjam(request, book_id):
 
             peminjam_baru = Loan.objects.create(
                 book=book,
-                nama=name,
-                tanggal_pengembalian=due_date,
-                alamat=address
+                user=request.user,  # Sesuaikan ini dengan pengguna yang membuat peminjaman
+                name=received_data.get('name'),
+                due_date=received_data.get('due_date'),
+                address=received_data.get('address')
             )
             peminjam_baru.save()
 
@@ -96,7 +95,6 @@ def tambah_peminjam(request, book_id):
 
     return JsonResponse({'message': 'Permintaan tidak valid.'}, status=400)
 
-@staff_member_required
 def get_product_json(request):
     product_item = Book.objects.all()
     return HTTPResponse(serializers.serialize('json', product_item))
