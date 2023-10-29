@@ -237,6 +237,8 @@ https://templatemo.com/tm-569-edu-meeting
 
 
   <!-- Pop-up form for inputting member's data -->
+  <button onclick="showPopupForm()">Pinjam Buku</button>
+
   <div id="close" style="display: none;">
     <div class="container-popup">
       <form id="ajax-form" onsubmit="return addLoan();">
@@ -260,6 +262,7 @@ https://templatemo.com/tm-569-edu-meeting
   </div>
 
 
+
   <!-- Scripts -->
   <!-- Bootstrap core JavaScript -->
     <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
@@ -273,37 +276,46 @@ https://templatemo.com/tm-569-edu-meeting
     <script src="{% static 'js/custom.js' %}"></script>
     <script>
         //according to loftblog tut
-          function addLoan() {
-            const name = document.getElementById('name').value;
-            const dueDate = document.getElementById('due_date').value;
-            const address = document.getElementById('address').value;
+        function addLoan() {
+          const name = document.getElementById('name').value;
+          const dueDate = document.getElementById('due_date').value;
+          const address = document.getElementById('address').value;
 
-            fetch("{% url 'HalamanInformasiBuku:tambah_peminjam' book.id %}", {
+          const data = {
+              name: name,
+              due_date: dueDate,
+              address: address,
+              
+          };
+
+          fetch("{% url 'HalamanInformasiBuku:tambah_peminjam' book.id %}", {
               method: 'POST',
-              body: JSON.stringify({ name, dueDate, address }),
+              body: JSON.stringify(data),
               headers: {
-                'Content-Type': 'application/json'
+                  'Content-Type': 'application/json',
+                  'X-CSRFToken': csrftoken // Menambahkan CSRF token ke header
               }
-            })
-            .then(response => {
+          })
+          .then(response => {
               if (!response.ok) {
-                throw new Error('Data submission failed');
+                  throw new Error('Data submission failed');
               }
               return response.json();
-            })
-            .then(data => {
+          })
+          .then(data => {
               alert('Data berhasil disimpan!');
               document.getElementById("ajax-form").reset();
               closePopupForm();
-            })
-            .catch(error => {
+          })
+          .catch(error => {
               console.error('Error saving data:', error);
               alert('Terjadi kesalahan saat menyimpan data');
               document.getElementById("ajax-form").reset();
-            });
+          });
 
-            return false;
-        }
+          return false;
+      }
+
 
         function showPopupForm() {
           document.getElementById("close").style.display = "block";
