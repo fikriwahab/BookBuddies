@@ -43,9 +43,7 @@ def book_detail(request, book_id):
     elif request.method == "POST":
         form = BorrowForm(request.POST)
         if form.is_valid():
-            # Lakukan sesuatu dengan data yang diterima dari formulir
-            # Contoh: Simpan data atau lakukan operasi lain
-            # Redirect atau tampilkan kembali halaman detail buku setelah POST
+           
             return HttpResponseRedirect(request.path_info)  # Redirect ke halaman detail buku
         else:
             # Jika formulir tidak valid, tampilkan kembali halaman detail buku dengan pesan kesalahan
@@ -100,26 +98,17 @@ def get_product_json(request):
     product_item = Book.objects.all()
     return HTTPResponse(serializers.serialize('json', product_item))
 
+
 def get_json(request, book_id):
-    if request.user.is_superuser:  
-        try:
-            book = Book.objects.get(pk=book_id)
-            borrowers = book.borrowers.all()
-            updated_list = []
+    if request.user.is_superuser:
+        loan_details = Loan.objects.filter(book_id=book_id).values('name', 'due_date', 'address')
+        
+        loan_list = list(loan_details)
 
-            for borrower in borrowers:
-                borrower_info = {
-                    'name': borrower.name,
-                    'due_date': borrower.due_date,
-                    'address': borrower.address,
-                }
-                updated_list.append(borrower_info)
-
-            return JsonResponse(updated_list, safe=False)
-        except Book.DoesNotExist:
-            return HttpResponse("Book not found", status=404)
+        return JsonResponse(loan_list, safe=False)
     else:
         return JsonResponse({"error": "Unauthorized"}, status=401)
+
 
 
 

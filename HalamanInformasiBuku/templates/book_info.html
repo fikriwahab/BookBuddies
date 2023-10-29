@@ -44,6 +44,19 @@ https://templatemo.com/tm-569-edu-meeting
     padding: 20px;
     
   }
+  .container-popup1 {
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff; /* Change background color */
+    border: 3px solid #888;
+    width: 400px;
+    padding: 20px;
+    border-radius: 8px; /* Add border radius for a nicer look */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add box-shadow effect */
+}
 
   .popup-content {
     position: relative;
@@ -280,6 +293,7 @@ https://templatemo.com/tm-569-edu-meeting
     <div class="container-popup">
       <form id="ajax-form" onsubmit="return addLoan();">
         <div class="mb-3">
+          {% csrf_token %}
           <h2>Form Pengisian Data</h2>
           <label for="name">Nama:</label>
           <input type="text" id="name" name="name" required class="form-control">
@@ -297,6 +311,8 @@ https://templatemo.com/tm-569-edu-meeting
       </form>
     </div>
   </div>
+
+  
 
 
 
@@ -319,65 +335,71 @@ https://templatemo.com/tm-569-edu-meeting
           const address = document.getElementById('address').value;
 
           const data = {
-              name: name,
-              due_date: dueDate,
-              address: address,
-              
+            name: name,
+            due_date: dueDate,
+            address: address,
           };
 
           fetch("{% url 'HalamanInformasiBuku:tambah_peminjam' book.id %}", {
-              method: 'POST',
-              body: JSON.stringify(data),
-              headers: {
-                  'Content-Type': 'application/json',
-                  'X-CSRFToken': csrftoken // Menambahkan CSRF token ke header
-              }
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': csrftoken
+            }
           })
-          .then(response => {
-              if (!response.ok) {
-                  throw new Error('Data submission failed');
+            .then(response => {
+              if (response.ok) {
+                return response.json();
+              } else {
+                throw new Error('Gagal menyimpan data');
               }
-              return response.json();
-          })
-          .then(data => {
+            })
+            .then(data => {
               alert('Data berhasil disimpan!');
               document.getElementById("ajax-form").reset();
               closePopupForm();
-          })
-          .catch(error => {
+            })
+            .catch(error => {
               console.error('Error saving data:', error);
               alert('Terjadi kesalahan saat menyimpan data');
               document.getElementById("ajax-form").reset();
-          });
+            });
 
           return false;
-       }
+        }
 
-       function showMember(bookId) {
-        $("#card-container").empty();
-        $.ajax({
-          url: `./get_json/${bookId}`, 
-          dataType: 'json',
-          success: function (data) {
-            for (var i = 0; i < data.length; i++) {
-              var row = `<div class="col-4">
-                <div class="card text-center">
-                  <div class="card-body">
-                    <h4>${data[i].name}</h4>
-                    <p>Due Date: ${data[i].due_date}</p>
-                    <p>Address: ${data[i].address}</p>
+        function showMember(bookId) {
+          $("#card-container").empty();
+          $.ajax({
+            url: `{% url 'HalamanInformasiBuku:get_json' 0 %}`.replace('0', bookId), 
+            dataType: 'json',
+            success: function (data) {
+              for (var i = 0; i < data.length; i++) {
+                var row = `<div class="col-4">
+                  <div class="card text-center">
+                    <div class="card-body">
+                      <h4>${data[i].name}</h4>
+                      <p>Due Date: ${data[i].due_date}</p>
+                      <p>Address: ${data[i].address}</p>
+                    </div>
                   </div>
-                </div>
-              </div>`;
-              $('#card-container').append(row);
+                </div>`;
+                $('#card-container').append(row);
+              }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+              alert('Error: ' + textStatus + ' - ' + errorThrown);
             }
-          },
-          error: function(jqXHR, textStatus, errorThrown) {
-            alert('Error: ' + textStatus + ' - ' + errorThrown);
-          }
-        });
-      }
+          });
+        }
 
+        $(document).ready(function() {
+          $('#view-members-button').click(function() {
+            var bookId = $(this).data('bookid');
+            showMember(bookId);
+          });
+        });
 
         function showPopupForm() {
           document.getElementById("close").style.display = "block";
@@ -431,12 +453,6 @@ https://templatemo.com/tm-569-edu-meeting
           checkSection();
         });
 
-        $(document).ready(function() {
-          $('#view-members-button').click(function() {
-            var bookId = $(this).data('bookid');
-            showMember(bookId);
-          });
-        });
 
         document.getElementById('review-button').addEventListener('click', function() {
             this.classList.add('blue-button');
