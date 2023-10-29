@@ -198,22 +198,30 @@ https://templatemo.com/tm-569-edu-meeting
             </div>
             
             {% if user.is_authenticated %}
-              {% if loan %}
-                <p>Status: Dipinjam</p>
+              {% if user.is_superuser %}
+                <!-- Bagian untuk admin -->
+                <div class="button-container" style="text-align: center;">
+                  <button id="review-button" data-bookid="{{ book.id }}" class="red-button">Review</button>
+                  <button id="bookmark-button" data-bookid="{{ book.id }}" class="red-button">Bookmark</button>
+                  <button id="view-members-button" data-bookid="{{ book.id }}" class="red-button">Lihat Member</button>
+                </div>
               {% else %}
-                <p>Status: Tersedia</p>
+                <!-- Bagian untuk member -->
+                {% if loan %}
+                  <p>Status: Dipinjam</p>
+                {% else %}
+                  <p>Status: Tersedia</p>
+                {% endif %}
+                <div class="button-container" style="text-align: center;">
+                  <button id="review-button" data-bookid="{{ book.id }}" class="red-button">Review</button>
+                  <button id="bookmark-button" data-bookid="{{ book.id }}" class="red-button">Bookmark</button>
+                  <button type="button" onclick="showPopupForm()" class="red-button">Pinjam</button>
+                </div>
               {% endif %}
-                <!-- Bagian untuk pengguna yang sudah terautentikasi -->
-              <div class="button-container" style="text-align: center;">
-                <button id="review-button" data-bookid="{{ book.id }}" class="red-button">Review</button>
-                <button id="bookmark-button" data-bookid="{{ book.id }}" class="red-button">Bookmark</button>
-                <button type="button" onclick="showPopupForm()" class="red-button">Pinjam</button>
-              </div>
             {% else %}
-                <!-- Bagian untuk pengguna yang belum terautentikasi -->
-                <p>Silakan <a href="{% url 'authentication:login' %}">Login</a> atau <a href="{% url 'authentication:register' %}">Register</a> untuk melakukan tindakan ini.</p>
+              <!-- Bagian untuk pengguna yang belum terautentikasi -->
+              <p>Silakan <a href="{% url 'authentication:login' %}">Login</a> atau <a href="{% url 'authentication:register' %}">Register</a> untuk melakukan tindakan ini.</p>
             {% endif %}
-            
 
             <div class="col-lg-12">
               <div class="main-button-red">
@@ -235,9 +243,6 @@ https://templatemo.com/tm-569-edu-meeting
     </div>
   </section>
 
-
-  <!-- Pop-up form for inputting member's data -->
-  <button onclick="showPopupForm()">Pinjam Buku</button>
 
   <div id="close" style="display: none;">
     <div class="container-popup">
@@ -314,6 +319,31 @@ https://templatemo.com/tm-569-edu-meeting
           });
 
           return false;
+       }
+
+       function showMember(bookId) {
+        $("#card-container").empty();
+        $.ajax({
+          url: `./get_json/${bookId}`, 
+          dataType: 'json',
+          success: function (data) {
+            for (var i = 0; i < data.length; i++) {
+              var row = `<div class="col-4">
+                <div class="card text-center">
+                  <div class="card-body">
+                    <h4>${data[i].name}</h4>
+                    <p>Due Date: ${data[i].due_date}</p>
+                    <p>Address: ${data[i].address}</p>
+                  </div>
+                </div>
+              </div>`;
+              $('#card-container').append(row);
+            }
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+            alert('Error: ' + textStatus + ' - ' + errorThrown);
+          }
+        });
       }
 
 
@@ -369,6 +399,12 @@ https://templatemo.com/tm-569-edu-meeting
           checkSection();
         });
 
+        $(document).ready(function() {
+          $('#view-members-button').click(function() {
+            var bookId = $(this).data('bookid');
+            showMember(bookId);
+          });
+        });
 
         document.getElementById('review-button').addEventListener('click', function() {
             this.classList.add('blue-button');
