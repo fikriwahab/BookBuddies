@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext as _
+from django.contrib.auth.models import User
 
 class Book (models.Model):
     title = models.CharField(_("title"), max_length=255)
@@ -16,3 +17,16 @@ class Book (models.Model):
     cover = models.ImageField(upload_to='covers/', null=True, blank=True)
 
 '%d/%m/%y' # '16/09/2006'
+
+
+class UserProfile(models.Model):
+    USER_ROLES = (
+        ('A', 'Admin'),
+        ('M', 'Member'),
+        ('G', 'Guest'),
+    )
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    role = models.CharField(max_length=1, choices=USER_ROLES, default='G')
+
+
