@@ -156,7 +156,9 @@ https://templatemo.com/tm-569-edu-meeting
                       <!-- ***** Menu Start ***** -->
                       <ul class="nav">
                           <li><a href="{% url 'katalog:book_list' %}">Home</a></li>
-                          <li><a href="#" class="active">BookMarked</a></li>
+                          <a href="{% url 'bookmarks:bookmark_page' %}">
+                            <button class="red-button" id="bookmark-button" data-bookid="{{ book.id }}">Bookmarked</button>
+                          </a>
                           <li><a href="#">Recomended</a></li>
                           <li><a href="{% url 'DashboardAdmin:profile' %}">Profile</a></li>
                       </ul>        

@@ -86,7 +86,10 @@
             </div>
         {% else %}
             <p>Tidak ada buku pada Bookmark.</p>
-            <a href="#">Cari Buku Kesukaanmu</a>
+            <a href="{% url 'katalog:book_list' %}">
+                <button class="red-button">Cari Buku Kesukaanmu</button>
+              </a>
+
         {% endif %}
     </div>
 
