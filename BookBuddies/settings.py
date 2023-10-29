@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'HalamanInformasiBuku',
     'katalog',
     'bookmarks',
+    'DashboardAdmin',
 ]
 
 MIDDLEWARE = [
