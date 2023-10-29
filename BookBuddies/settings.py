@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'HalamanInformasiBuku',
     'katalog',
+    'bookmarks',
 ]
 
 MIDDLEWARE = [

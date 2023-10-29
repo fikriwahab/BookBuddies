@@ -5,6 +5,6 @@ from bookmarks.views import add_bookmark, bookmark_page
 app_name = 'bookmarks'
 
 urlpatterns = [
-    path('', bookmark_page , name='bookmark_page'),
+    path('bookmarks/', bookmark_page , name='bookmark_page'),
     path('', add_bookmark, name='add_bookmark'),
 ]
