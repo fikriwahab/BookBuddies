@@ -18,8 +18,8 @@ from HalamanInformasiBuku.models import Loan
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 import json
-
-
+from django.shortcuts import redirect
+from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 
 
@@ -56,7 +56,6 @@ def book_detail(request, book_id):
             return render(request, 'book_info.html', context)
 
 
-
 def is_book_available(book):
     # Fungsi untuk mengecek ketersediaan buku
     if Loan.objects.filter(book=book).exists():
@@ -65,37 +64,56 @@ def is_book_available(book):
 
 @csrf_exempt
 @login_required
-def tambah_peminjam(request, book_id):
-    if request.method == 'POST':
-        received_data = json.loads(request.body)
-        
-        name = received_data.get('name')
-        due_date =  received_data.get('due_date')
-        address = received_data.get('address')
+def tambah_peminjam(request):
+    if request.user.is_authenticated:
+        form = BorrowForm(request.POST)
+        data = {}
+        if request.method == 'POST' and form.is_valid():
+            name = form.cleaned_data['name']
+            due_date = form.cleaned_data['due_date']
+            address = form.cleaned_data['address']
+            try:
+                due_date = due_date.strptime(due_date, "%Y-%m-%d %H:%M:%S.%f").date()
+                due_date = due_date.strftime("%Y-%m-%d")
 
-        try:
-            book = Book.objects.get(id=book_id)
+                book = Book.objects.get(name=name)
+                if is_book_available(book):
+                    peminjam_baru = Loan.objects.create(
+                        book=book,
+                        user=request.user,
+                        name=name,
+                        due_date=due_date,
+                        address=address
+                    )
+                    data['name'] = name
+                    data['due_date'] = due_date
+                    data['address'] = address
+                    return JsonResponse(data)
+                else:
+                    return JsonResponse({'message': 'Buku tidak tersedia untuk dipinjam saat ini!'}, status=400)
+            except Book.DoesNotExist:
+                return JsonResponse({'message': 'Buku tidak ditemukan!'}, status=404)
+        else:
+            return JsonResponse({'message': 'Permintaan tidak valid.'}, status=400)
+    else:
+        return redirect('katalog:login')
 
-            # Memeriksa ketersediaan buku sebelum menambahkan peminjam
-            if not is_book_available(book):
-                return JsonResponse({'message': 'Buku tidak tersedia untuk dipinjam saat ini!'}, status=400)
-
-            peminjam_baru = Loan.objects.create(
-                book=book,
-                user=request.user,  # Sesuaikan ini dengan pengguna yang membuat peminjaman
-                name=received_data.get('name'),
-                due_date=received_data.get('due_date'),
-                address=received_data.get('address')
-            )
-            peminjam_baru.save()
-
-            return JsonResponse({'message': 'Peminjaman buku berhasil disimpan!'})
-
-        except Book.DoesNotExist:
-            return JsonResponse({'message': 'Buku tidak ditemukan!'}, status=404)
-
-    return JsonResponse({'message': 'Permintaan tidak valid.'}, status=400)
 
 def get_product_json(request):
     product_item = Book.objects.all()
     return HTTPResponse(serializers.serialize('json', product_item))
+
+def get_json(request):
+    if request.user.is_superuser:  # Memeriksa apakah pengguna adalah admin
+        list = Book.objects.all()
+        updated_list = []
+        for member_peminjam in list:
+            peminjam = member_peminjam.user
+            peminjam_info = {
+                'peminjam_username': peminjam.username,
+                'donasi_detail': serializers.serialize("json", [member_peminjam])
+            }
+            updated_list.append(peminjam_info)
+        return HttpResponse(serializers.serialize("json", updated_list), content_type="application/json")
+    else:
+        return HttpResponse("Unauthorized", status=401)
