@@ -2,6 +2,7 @@ from django.urls import path
 from BookBuddies import settings
 from HalamanInformasiBuku.views import book_detail, tambah_peminjam,  get_product_json, get_json
 from django.conf.urls.static import static
+from . import views
 
 app_name = 'HalamanInformasiBuku'
 
@@ -10,7 +11,6 @@ urlpatterns = [
     path('tambah_peminjam/<int:book_id>/', tambah_peminjam, name='tambah_peminjam'),
     path('get-product-json/', get_product_json, name='get_product_json'),
     path('get-json/', get_json, name='get_json'),
-
 ]
 
 

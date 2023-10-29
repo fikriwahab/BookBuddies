@@ -424,6 +424,32 @@ https://templatemo.com/tm-569-edu-meeting
         });
 
     </script>
+
+<script>
+  function addBookmark(bookId) {
+      fetch("{% url 'bookmarks:add_bookmark' %}", {
+          method: 'POST',
+          headers: {
+              'X-CSRFToken': csrftoken,
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ book_id: bookId }),
+      })
+      .then(response => response.json())
+      .then(data => {
+          alert(data.message);
+      })
+      .catch(error => {
+          console.error('Error:', error);
+          alert('Terjadi kesalahan saat menambahkan buku ke bookmark.');
+      });
+  }
+
+  document.getElementById('bookmark-button').addEventListener('click', function() {
+      const bookId = this.getAttribute('data-bookid');
+      addBookmark(bookId);
+  });
+</script>
 </body>
 
 

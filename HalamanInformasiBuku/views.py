@@ -1,7 +1,7 @@
 from datetime import datetime
 from http.client import HTTPResponse
 from smtplib import SMTPResponseException
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from katalog.models import Book
@@ -9,7 +9,6 @@ from HalamanInformasiBuku.models import Loan
 from HalamanInformasiBuku.forms import BorrowForm
 from django.http import HttpResponseRedirect
 import csv
-from django.shortcuts import render
 from katalog.models import Book
 from django.core import serializers
 from django.urls import reverse
@@ -18,10 +17,8 @@ from HalamanInformasiBuku.models import Loan
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 import json
-from django.shortcuts import redirect
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
-
 
 @login_required
 def book_detail(request, book_id):
