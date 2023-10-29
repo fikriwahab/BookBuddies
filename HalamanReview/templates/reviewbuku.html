@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Reviews</title>
+    <!-- Add icon library for star ratings -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-xxx" crossorigin="anonymous">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #FFFBF0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            color: #000;
+            text-align: center;
+            font-family: Inter;
+            font-size: 64px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+            width: 371px;
+            height: 62px;
+            flex-shrink: 0;
+            margin-top: 50px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            width: 371px;
+            color: #000;
+            text-align: center;
+            font-family: Inter;
+            font-size: 30px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+            height: 39px;
+            flex-shrink: 0;
+            margin-bottom: 50px;
+        }
+        h3 {
+            width: 371px;
+            color: #000;
+            text-align: center;
+            font-family: Inter;
+            font-size: 25px;
+            font-style: normal;
+            font-weight: 600;
+            line-height: normal;
+            height: 39px;
+            flex-shrink: 0;
+        }
+        h4 {
+            width: 423px;
+            height: 39px;
+            flex-shrink: 0;
+            color: #000;
+            text-align: center;
+            font-family: Inter;
+            font-size: 24px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+        }
+        p {
+            color: #000;
+            text-align: center;
+            font-family: Inter;
+            font-size: 24px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+            width: 767px;
+            height: 116px;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+        .review-card {
+            width: 977px;
+            height: 296px;
+            flex-shrink: 0;
+            border-radius: 20px;
+            background: #EDF8FC;
+            margin: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .rating {
+            color: #f1c644;
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            margin-top : 0px;
+            margin-bottom : 0px;
+        }
+        .star-icon {
+            color: orange;
+            font-size: 20px;
+        }
+        .add-review-button {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Book Title</h1>
+        <h2>by Author</h2>
+        <h4>150 ratings 150 reviews</h4>
+    </header>
+    <div class="container">
+        <div class="review-card">
+            <h3>Uuser_id</h3>
+            <div class="rating">
+                <span class="fa fa-star checked star-icon"></span>
+                <span class="fa fa-star checked star-icon"></span>
+                <span class="fa fa-star checked star-icon"></span>
+                <span class="fa fa-star star-icon"></span>
+                <span class="fa fa-star star-icon"></span>
+            </div>
+            <p>Review: This book is great!</p>
+        </div>
+        <div class="review-card">
+            <h3>Uuser</h3>
+            <div class="rating">
+                <span class="fa fa-star checked star-icon"></span>
+                <span class="fa fa-star checked star-icon"></span>
+                <span class="fa fa-star checked star-icon"></span>
+                <span class="fa fa-star checked star-icon"></span>
+                <span class="fa fa-star checked star-icon"></span>
+            </div>
+            <p>Review: Highly recommended!</p>
+        </div>
+        <!-- Add more review cards here -->
+    </div>
+    <button class="add-review-button">Add Review</button>
+</body>
+</html>
