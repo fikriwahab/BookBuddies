@@ -1,4 +1,3 @@
-{% extends 'base.html' %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,9 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bookmark Page</title>
 
+    <!-- Bootstrap core CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/booçtstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Additional CSS -->
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Poppins', sans-serif;
             background-color: #f5f5f5;
         }
 
@@ -16,6 +19,11 @@
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
         }
 
         h1 {
@@ -67,7 +75,7 @@
                 {% for bookmark in bookmarks %}
                     <div class="col-md-4">
                         <div class="card">
-                            <img src="{{ bookmark.book.cover_image_url }}" alt="{{ bookmark.book.title }} cover">
+                            <img src="#" alt="cover">
                             <div class="card-body">
                                 <h5 class="card-title">{{ bookmark.book.title }}</h5>
                                 <a href="{% url 'book_info' bookmark.book.id %}" class="btn btn-primary">Info Buku</a>
@@ -78,7 +86,7 @@
             </div>
         {% else %}
             <p>Tidak ada buku pada Bookmark.</p>
-            <a href="{% url 'main_page' %}" class="btn btn-primary">Cari Buku Kesukaanmu</a>
+            <a href="#">Cari Buku Kesukaanmu</a>
         {% endif %}
     </div>
 

@@ -140,6 +140,7 @@
         <p>Status: Dipinjam</p>
       {% else %}
         <p>Status: Tersedia</p>
+        <a href="{% url 'bookmarks_view' %}" class="bookmark-button">Bookmark</a>
         <button id="review-button">Review</button>
       {% endif %}
 
@@ -147,7 +148,6 @@
         <button id="bookmark-button" data-bookid="{{ book.id }}">Bookmark</button>
         <button type="button" onclick="showPopupForm()">Pinjam</button>
       {% endif %}
-
     </div>
   </section>
 
