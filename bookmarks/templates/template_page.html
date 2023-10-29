@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookmark Page</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .card {
+            background-color: #fff;
+            margin: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .card img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .card-body {
+            padding: 10px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        .btn {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 5px 10px;
+            text-decoration: none;
+            border: none;
+            border-radius: 3px;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bookmark Page</h1>
+
+        {% if bookmarks %}
+            <div class="row">
+                {% for bookmark in bookmarks %}
+                    <div class="col-md-4">
+                        <div class="card">
+                            <img src="{{ bookmark.book.cover_image_url }}" alt="{{ bookmark.book.title }} cover">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ bookmark.book.title }}</h5>
+                                <a href="{% url 'book_info' bookmark.book.id %}" class="btn btn-primary">Info Buku</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>Tidak ada buku pada Bookmark.</p>
+            <a href="{% url 'main_page' %}" class="btn btn-primary">Cari Buku Kesukaanmu</a>
+        {% endif %}
+    </div>
+
+    <script>
+        function removeBookmark(bookmarkId) {
+            // Tambahkan logika untuk menghapus bookmark dengan AJAX
+        }
+    </script>
+</body>
+</html>
