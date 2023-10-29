@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    .book-card {
+        border: 1px solid #e0e0e0;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-bottom: 20px; /* ubah dari margin ke margin-bottom agar tidak ada spacing ekstra di atas card */
+        background-color: #fff;
+        transition: transform 0.3s;
+    }
+
+    .book-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .book-image {
+        width: 100px;
+        margin: 0 auto;
+        display: block;
+    }
+
+    .book-category, .book-title {
+        text-align: center;
+        margin-top: 10px;
+    }
+</style>
+
+<div class="container"> <!-- Container Bootstrap -->
+    <div class="row"> <!-- Row Bootstrap -->
+
+        {% for book in book_list %}
+        <div class="col-md-2"> <!-- Grid Bootstrap dengan lebar 2 dari 12 -->
+            <div class="book-card">
+                <a href="{% url 'HalamanInformasiBuku:book_detail' book.id %}">
+                    <div class="book-cover">
+                        <img class="book-image" src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-S.jpg" alt="{{ book.title }}" />
+                        <div class="book-title">{{ book.title }}</div>
+                    </div>
+                    <p style="color: #151347;">{{ book.publisher }}</p>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+{% endblock %}

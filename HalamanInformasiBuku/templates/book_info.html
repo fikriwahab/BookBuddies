@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ book.title }}</h1>
+<p>Pengarang: {{ book.author }}</p>
+<p>{{ book.description }}</p>
+
+{% if loan %}
+  <p>Status: Dipinjam</p>
+  <a href="{% url 'return_book' book.id %}">Kembalikan</a>
+{% else %}
+  <p>Status: Tersedia</p>
+  <button id="borrow-book-button">Pinjam Buku</button>
+  <button id="bookmark-button" data-bookid="{{ book.id }}">Bookmark</button>
+  <a href="{% url 'review' book.id %}" class="btn btn-success">Review</a>
+{% endif %}
+
+<h2>Ulasan</h2>
+<ul>
+  {% for review in reviews %}
+    <li>{{ review.text }}</li>
+  {% endfor %}
+</ul>
+
+<div id="borrow-modal" style="display: none;">
+  <!-- Konten modal peminjaman di sini -->
+</div>
+
+<script>
+    $('#borrow-book-button').click(function() {
+        $('#borrow-modal').show();
+    });
+
+    // Saat form peminjaman disubmit, kirim data melalui AJAX
+    $('#borrow-form').submit(function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: "{% url 'borrow_book' book.id %}",
+            type: 'post',
+            data: $('#borrow-form').serialize(),
+            dataType: 'json',
+            success: function(data) {
+                if (data.success) {
+                    $('#borrow-modal').hide();
+                    alert('Buku telah berhasil dipinjam.');
+                } else {
+                    alert('Terjadi kesalahan: ' + data.errors);
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

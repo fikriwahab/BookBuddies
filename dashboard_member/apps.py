@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class HalamanreviewConfig(AppConfig):
+class DashboardMemberConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'halamanreview'
+    name = 'dashboard_member'
