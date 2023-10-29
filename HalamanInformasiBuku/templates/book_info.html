@@ -156,9 +156,7 @@ https://templatemo.com/tm-569-edu-meeting
                       <!-- ***** Menu Start ***** -->
                       <ul class="nav">
                           <li><a href="{% url 'katalog:book_list' %}">Home</a></li>
-                          <a href="{% url 'bookmarks:bookmark_page' %}">
-                            <button class="red-button" id="bookmark-button" data-bookid="{{ book.id }}">Bookmarked</button>
-                          </a>
+                          <li><a href="{% url 'bookmarks:bookmark_page' %}" id="bookmark-button" data-bookid="{{ book.id }}">Bookmarked</button></a></li>
                           <li><a href="#">Recomended</a></li>
                           <li><a href="{% url 'DashboardAdmin:profile' %}">Profile</a></li>
                       </ul>        
@@ -217,9 +215,7 @@ https://templatemo.com/tm-569-edu-meeting
                 <!-- Bagian untuk admin -->
                 <div class="button-container" style="text-align: center;">
                   <button id="review-button" data-bookid="{{ book.id }}" class="red-button">Review</button>
-                  <a href="{% url 'bookmarks:bookmark_page' %}">
-                    <button class="red-button" id="bookmark-button" data-bookid="{{ book.id }}">Bookmark</button>
-                  </a>
+                  <button class="red-button" id="bookmark-button" data-bookid="{{ book.id }}">Bookmark</button>
                   <button id="view-members-button" data-bookid="{{ book.id }}" class="red-button">Lihat Member</button>
                 </div>
               {% else %}
@@ -231,9 +227,7 @@ https://templatemo.com/tm-569-edu-meeting
                 {% endif %}
                 <div class="button-container" style="text-align: center;">
                   <button id="review-button" data-bookid="{{ book.id }}" class="red-button">Review</button>
-                  <a href="{% url 'bookmarks:bookmark_page' %}">
-                    <button class="red-button" id="bookmark-button" data-bookid="{{ book.id }}">Bookmark</button>
-                  </a>
+                  <button id="bookmark-button" data-bookid="{{ book.id }}" class="red-button" >Bookmark</button>
                   <button type="button" onclick="showPopupForm()" class="red-button">Pinjam</button>
                 </div>
               {% endif %}
@@ -285,10 +279,6 @@ https://templatemo.com/tm-569-edu-meeting
       </form>
     </div>
   </div>
-
-  
-
-
 
   <!-- Scripts -->
   <!-- Bootstrap core JavaScript -->
@@ -435,13 +425,6 @@ https://templatemo.com/tm-569-edu-meeting
             }, 1000); 
         });
 
-        document.getElementById('bookmark-button').addEventListener('click', function() {
-            this.classList.add('blue-button');
-            setTimeout(() => {
-                this.classList.remove('blue-button');
-            }, 1000); 
-        });
-
         document.querySelector('button[onclick="showPopupForm()"]').addEventListener('click', function() {
             this.classList.add('blue-button');
             setTimeout(() => {
@@ -449,10 +432,37 @@ https://templatemo.com/tm-569-edu-meeting
             }, 1000); 
         });
 
+        document.getElementById('bookmark-button').addEventListener('click', function () {
+        // Simpan referensi ke tombol
+        var bookmarkButton = this;
+
+        // Mengambil ID buku dari atribut data-bookid
+        const bookId = bookmarkButton.getAttribute('data-bookid');
+
+        // Lakukan permintaan Ajax untuk menyimpan buku ke bookmark
+        fetch('/add_bookmark/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken'),
+          },
+          body: JSON.stringify({ book_id: bookId }),
+        })
+        .then(response => {
+          if (response.ok) {
+            // Sukses menambahkan ke bookmark, Anda dapat memberikan pesan sukses atau mengubah tampilan tombol jika diperlukan
+            bookmarkButton.innerText = "Bookmarked";
+            bookmarkButton.disabled = true; // Optional: Menonaktifkan tombol setelah ditambahkan ke bookmark
+          } else {
+            // Gagal menambahkan ke bookmark, Anda dapat memberikan pesan kesalahan.
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          // Tangani kesalahan jaringan atau lainnya di sini.
+        });
+      });
     </script>
+  </body>
 </body>
-
-
-</body>
-
 </html>

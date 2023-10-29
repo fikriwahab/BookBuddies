@@ -6,5 +6,5 @@ app_name = 'bookmarks'
 
 urlpatterns = [
     path('bookmarks/', bookmark_page , name='bookmark_page'),
-    path('', add_bookmark, name='add_bookmark'),
+    path('add_bookmark/', add_bookmark, name='add_bookmark'),
 ]
