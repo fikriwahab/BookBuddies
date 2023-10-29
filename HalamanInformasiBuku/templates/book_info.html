@@ -29,11 +29,89 @@ TemplateMo 569 Edu Meeting
 https://templatemo.com/tm-569-edu-meeting
 
 -->
-  </head>
+
+<style>
+
+  .container-popup {
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #873c3a;
+    border: 3px solid #888;
+    width: 400px;
+    padding: 20px;
+    
+  }
+
+  .popup-content {
+    position: relative;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 10px;
+    margin: 6px 0;
+    border: 1px solid #b77676;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+
+  .btn {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+  }
+
+  .btn-primary {
+    background-color: #5989bc;
+    color: white;
+    transition: background-color 0.3s;
+  }
+
+  .btn-primary:hover {
+    background-color: #42678f;
+  }
+
+  .btn-secondary {
+    background-color: #6c757d;
+    color: white;
+  }
+
+  .btn-secondary:hover {
+    background-color: #343a40;
+  }
+
+    /* Gaya awal tombol */
+  .red-button {
+      background-color:  #8c3434;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      margin: 5px;
+      transition: background-color 0.3s; /* Efek transisi warna saat diubah */
+      border-radius: 8px; 
+  }
+
+  /* Gaya tombol saat diklik */
+  .blue-button {
+      background-color: blue;
+  }
+
+  /* Efek hover untuk tombol */
+  .red-button:hover {
+      background-color: rgb(198, 65, 65); 
+  }
+
+</style>
+</head>
 
 <body>
 
-   
   <!-- Sub Header -->
   <div class="sub-header">
     <div class="container">
@@ -64,7 +142,7 @@ https://templatemo.com/tm-569-edu-meeting
                       <!-- ***** Logo End ***** -->
                       <!-- ***** Menu Start ***** -->
                       <ul class="nav">
-                          <li><a href="#">Home</a></li>
+                          <li><a href="{% url 'katalog:book_list' %}">Home</a></li>
                           <li><a href="#" class="active">BookMarked</a></li>
                           <li><a href="#">Recomended</a></li>
                           <li><a href="#">Profile</a></li>
@@ -100,9 +178,10 @@ https://templatemo.com/tm-569-edu-meeting
               <div class="meeting-single-item">
                 <div class="thumb">
                   <a href="book_info.html"><img src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-S.jpg" alt="{{ book.title }}"></a>
+                  
                 </div>
                 <div class="down-content">
-                  <a href="meeting-details.html"><h4>information of Book</h4></a>
+                  <a href="meeting-details.html"><h4>Information of Book</h4></a>
                   <p>Pengarang: {{ book.authors }}</p>
                   <p>Average Rating : {{book.average_rating}}</p>
                   <p>ISBN : {{book.isbn}}</p>
@@ -117,6 +196,25 @@ https://templatemo.com/tm-569-edu-meeting
                 </div>
               </div>
             </div>
+            
+            {% if user.is_authenticated %}
+              {% if loan %}
+                <p>Status: Dipinjam</p>
+              {% else %}
+                <p>Status: Tersedia</p>
+              {% endif %}
+                <!-- Bagian untuk pengguna yang sudah terautentikasi -->
+              <div class="button-container" style="text-align: center;">
+                <button id="review-button" data-bookid="{{ book.id }}" class="red-button">Review</button>
+                <button id="bookmark-button" data-bookid="{{ book.id }}" class="red-button">Bookmark</button>
+                <button type="button" onclick="showPopupForm()" class="red-button">Pinjam</button>
+              </div>
+            {% else %}
+                <!-- Bagian untuk pengguna yang belum terautentikasi -->
+                <p>Silakan <a href="{% url 'authentication:login' %}">Login</a> atau <a href="{% url 'authentication:register' %}">Register</a> untuk melakukan tindakan ini.</p>
+            {% endif %}
+            
+
             <div class="col-lg-12">
               <div class="main-button-red">
                 <a href="{% url 'katalog:book_list' %}">Back to Book List</a>
@@ -127,17 +225,6 @@ https://templatemo.com/tm-569-edu-meeting
       </div>
     </div>
     <div class="footer">
-      {% if loan %}
-        <p>Status: Dipinjam</p>
-      {% else %}
-        <p>Status: Tersedia</p>
-        <button id="review-button">Review</button>
-      {% endif %}
-
-      {% if user.is_authenticated %}
-        <button id="bookmark-button" data-bookid="{{ book.id }}">Bookmark</button>
-        <button type="button" onclick="showPopupForm()">Pinjam</button>
-      {% endif %}
 
       <p>Copyright © 2022 Edu Meeting Co., Ltd. All Rights Reserved. 
           <br>
@@ -150,26 +237,28 @@ https://templatemo.com/tm-569-edu-meeting
 
 
   <!-- Pop-up form for inputting member's data -->
-  <div id="close" style="display: none;"> <!-- Hide the pop-up form by default -->
+  <div id="close" style="display: none;">
     <div class="container-popup">
       <form id="ajax-form" onsubmit="return addLoan();">
         <div class="mb-3">
-          <label for="name">Name:</label>
-          <input type="text" id="name" name="name" required>
+          <h2>Form Pengisian Data</h2>
+          <label for="name">Nama:</label>
+          <input type="text" id="name" name="name" required class="form-control">
         </div>
         <div class="mb-3">
           <label for="due_date">Tanggal Pengembalian:</label>
-          <input type="text" name="due_date" id="due_date" required>
+          <input type="text" name="due_date" id="due_date" required class="form-control">
         </div>
         <div class="mb-3">
           <label for="address">Alamat:</label>
-          <textarea id="address" name="address" required></textarea>
+          <textarea id="address" name="address" required class="form-control"></textarea>
         </div>
-        <button type="submit" id="button_add">Submit Data</button>
-        <button type="button" class="close" onclick="closePopupForm()">Close</button>
+        <button type="submit" id="button_add" class="btn btn-primary">Submit Data</button>
+        <button type="button" class="btn btn-secondary close" onclick="closePopupForm()">Close</button>
       </form>
     </div>
   </div>
+
 
   <!-- Scripts -->
   <!-- Bootstrap core JavaScript -->
@@ -185,34 +274,34 @@ https://templatemo.com/tm-569-edu-meeting
     <script>
         //according to loftblog tut
           function addLoan() {
-          const name = document.getElementById('name').value;
-          const dueDate = document.getElementById('due_date').value;
-          const address = document.getElementById('address').value;
+            const name = document.getElementById('name').value;
+            const dueDate = document.getElementById('due_date').value;
+            const address = document.getElementById('address').value;
 
-          fetch("{% url 'HalamanInformasiBuku:tambah_peminjam' book.id %}", {
-            method: 'POST',
-            body: JSON.stringify({ name, dueDate, address }),
-            headers: {
-              'Content-Type': 'application/json'
-            }
-          })
-          .then(response => {
-            if (!response.ok) {
-              throw new Error('Data submission failed');
-            }
-            return response.json();
-          })
-          .then(data => {
-            alert('Data berhasil disimpan!');
-            document.getElementById("ajax-form").reset();
-            closePopupForm();
-          })
-          .catch(error => {
-            console.error('Error saving data:', error);
-            alert('Terjadi kesalahan saat menyimpan data');
-          });
+            fetch("{% url 'HalamanInformasiBuku:tambah_peminjam' book.id %}", {
+              method: 'POST',
+              body: JSON.stringify({ name, dueDate, address }),
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            })
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Data submission failed');
+              }
+              return response.json();
+            })
+            .then(data => {
+              alert('Data berhasil disimpan!');
+              document.getElementById("ajax-form").reset();
+              closePopupForm();
+            })
+            .catch(error => {
+              console.error('Error saving data:', error);
+              alert('Terjadi kesalahan saat menyimpan data');
+            });
 
-          return false;
+            return false;
         }
 
         function showPopupForm() {
@@ -266,10 +355,33 @@ https://templatemo.com/tm-569-edu-meeting
         $(window).scroll(function () {
           checkSection();
         });
+
+
+        document.getElementById('review-button').addEventListener('click', function() {
+            this.classList.add('blue-button');
+            setTimeout(() => {
+                this.classList.remove('blue-button');
+            }, 1000); 
+        });
+
+        document.getElementById('bookmark-button').addEventListener('click', function() {
+            this.classList.add('blue-button');
+            setTimeout(() => {
+                this.classList.remove('blue-button');
+            }, 1000); 
+        });
+
+        document.querySelector('button[onclick="showPopupForm()"]').addEventListener('click', function() {
+            this.classList.add('blue-button');
+            setTimeout(() => {
+                this.classList.remove('blue-button');
+            }, 1000); 
+        });
+
     </script>
 </body>
 
 
-  </body>
+</body>
 
 </html>
