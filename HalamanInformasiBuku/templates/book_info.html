@@ -215,7 +215,9 @@ https://templatemo.com/tm-569-edu-meeting
                 <!-- Bagian untuk admin -->
                 <div class="button-container" style="text-align: center;">
                   <button id="review-button" data-bookid="{{ book.id }}" class="red-button">Review</button>
-                  <button id="bookmark-button" data-bookid="{{ book.id }}" class="red-button">Bookmark</button>
+                  <a href="{% url 'bookmarks:bookmark_page' %}">
+                    <button class="red-button" id="bookmark-button" data-bookid="{{ book.id }}">Bookmark</button>
+                  </a>
                   <button id="view-members-button" data-bookid="{{ book.id }}" class="red-button">Lihat Member</button>
                 </div>
               {% else %}
@@ -227,7 +229,9 @@ https://templatemo.com/tm-569-edu-meeting
                 {% endif %}
                 <div class="button-container" style="text-align: center;">
                   <button id="review-button" data-bookid="{{ book.id }}" class="red-button">Review</button>
-                  <button id="bookmark-button" data-bookid="{{ book.id }}" class="red-button">Bookmark</button>
+                  <a href="{% url 'bookmarks:bookmark_page' %}">
+                    <button class="red-button" id="bookmark-button" data-bookid="{{ book.id }}">Bookmark</button>
+                  </a>
                   <button type="button" onclick="showPopupForm()" class="red-button">Pinjam</button>
                 </div>
               {% endif %}
