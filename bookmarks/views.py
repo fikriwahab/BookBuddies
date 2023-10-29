@@ -11,4 +11,4 @@ def bookmark_page(request):
 
     context = {'bookmarks': bookmarks}
 
-    return render(request, 'bookmark.html', context)
+    return render(request, 'bookmark_page.html', context)
