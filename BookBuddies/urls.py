@@ -21,7 +21,8 @@ urlpatterns = [
     path('', include('katalog.urls')),  # Integrasikan katalog dengan URL utama
     # path('admin/', admin.site.urls),
     path('admin/', include('DashboardAdmin.urls')),
-    path('detail/', include('HalamanInformasiBuku.urls')),  # Integrasikan HalamanInformasiBuku dengan URL utama
+    path('detail/', include('HalamanInformasiBuku.urls')), 
+    path('review/', include('halamanreview.urls')),  # Integrasikan HalamanInformasiBuku dengan URL utama
     # path('login/', views.login_view, name='login'),
     # path('logout/', views.logout_view, name='logout'),
     # path('register/', views.register_view, name='register'),
