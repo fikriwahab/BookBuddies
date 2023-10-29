@@ -4,7 +4,7 @@
 - Fikri Massaid Wahab (2206083395)
 - Gallan Adrizqi Samudra
 - Marchelina Anjani S (2206082770)
-- Nabil Nazir Ahmad
+- Nabil Nazir Ahmad (2206082663)
 - Syarna Savitri
 ## Cerita Aplikasi
 BookBuddies hadir sebagai aplikasi yang menjembatani komunitas pecinta buku yang inin saling berbagi dan meminjamkan koleksi buku satu sama lain. Tujuan aplikasi ini selain untuk meningkatkan literasi, adalah memberikan manfaat lebih untuk buku-buku yang sudah kita miliki dan kita baca dengan meminjamkannya ke pengguna lain yang ingin membaca buku yang kita miliki. Aplikasi ini memiliki manfaat untuk memudahkan akses membaca buku, misalnya meminjam buku antik yang tidak lagi dicetak, juga memungkinkan pengguna untuk meminjamkan buku yang telah mereka baca dan tidak lagi digunakan secara gratis. Selain itu, aplikasi ini juga menyediakan fitur review serta ulasan buku antar pengguna.
