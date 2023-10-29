@@ -82,16 +82,11 @@
             margin-bottom: 20px;
         }
         .review-card {
-            width: 977px;
-            height: 296px;
-            flex-shrink: 0;
-            border-radius: 20px;
-            background: #EDF8FC;
+            width: 80%;
             margin: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             padding: 20px;
+            border: 1px solid #ccc;
+            background: #f8f8f8;
         }
         .rating {
             color: #f1c644;
@@ -117,64 +112,194 @@
     </style>
 </head>
 <body>
-    <!-- ***** Header Area Start ***** -->
-  <header class="header-area header-sticky">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <nav class="main-nav">
-                    <!-- ***** Logo Start ***** -->
-                    <a href="index.html" class="logo">
-                        BookBuddies
-                    </a>
-                    <!-- ***** Logo End ***** -->
-                    <!-- ***** Menu Start ***** -->
-                    <ul class="nav">
-                        <li><a href="{% url 'katalog:book_list' %}">Home</a></li>
-                        <li><a href="#" class="active">BookMarked</a></li>
-                        <li><a href="#">Recomended</a></li>
-                        <li><a href="{% url 'DashboardAdmin:profile' %}">Profile</a></li>
-                    </ul>        
-                    <a class='menu-trigger'>
-                        <span>Menu</span>
-                    </a>
-                    <!-- ***** Menu End ***** -->
-                </nav>
+    <!-- Review Card -->
+    <div id="review-data"></div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalAddReview" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <!--Modal Header-->
+                <div class="modal-header">
+                    <h3 class="modal-title" id="myModalLabel">Add your review {{user.username}} </h3>
+                </div>
+                <div>
+                    <h6 class="modal-title text-danger font-weight-bold text-center" id="alert-text"></h6>
+                </div>
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    <form method="POST" action="" id="add-review-form">
+                        {% csrf_token %}
+                        <div class="form-outline mb-10">
+                            <textarea id='text-handler' type="text" rows="10" class="form-control" name="text-area"
+                                placeholder="How do you feel reading this book?..." required></textarea>
+                        </div>
+                        <!-- Rating input using star icons -->
+                        <div class="rating-input">
+                            <span class="rating-label">Rating:</span>
+                            <span class="fa fa-star star-icon" id="star1"></span>
+                            <span class="fa fa-star star-icon" id="star2"></span>
+                            <span class="fa fa-star star-icon" id="star3"></span>
+                            <span class="fa fa-star star-icon" id="star4"></span>
+                            <span class="fa fa-star star-icon" id="star5"></span>
+                            <input type="hidden" name="rating" id="rating" value="0">
+                        </div>
+                    </form>
+                </div>
+                <!--Modal Footer-->
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-outline-danger">Close</button>
+                    <button id="save-harapan" type="submit" class="btn btn-outline-success">Simpan</button>
+                </div>
             </div>
         </div>
-    </div>
-</header>
-<!-- ***** Header Area End ***** -->
-    <header>
-        <h1>Book Title</h1>
-        <h2>by Author</h2>
-        <h4>150 ratings 150 reviews</h4>
-    </header>
-    <div class="container">
-        <div class="review-card">
-            <h3>Uuser_id</h3>
-            <div class="rating">
-                <span class="fa fa-star checked star-icon"></span>
-                <span class="fa fa-star checked star-icon"></span>
-                <span class="fa fa-star checked star-icon"></span>
-                <span class="fa fa-star star-icon"></span>
-                <span class="fa fa-star star-icon"></span>
-            </div>
-            <p>Review: This book is great!</p>
-        </div>
-        <div class="review-card">
-            <h3>Uuser</h3>
-            <div class="rating">
-                <span class="fa fa-star checked star-icon"></span>
-                <span class="fa fa-star checked star-icon"></span>
-                <span class="fa fa-star checked star-icon"></span>
-                <span class="fa fa-star checked star-icon"></span>
-                <span class="fa fa-star checked star-icon"></span>
-            </div>
-            <p>Review: Highly recommended!</p>
-        </div>
-        <!-- Add more review cards here -->
-    </div>
-    <button class="add-review-button">Add Review</button>
 </body>
+
+<main>
+    <div>
+        <!-- Harapan Card -->
+        <div id="harapan-data"></div>
+    </div>
+
+<script>
+    const textarea = document.getElementById('text-handler');
+    const alert_text = document.getElementById('alert-text');
+
+    function createReview() {
+        if ($('#text-handler').val() != "") {
+            $.post({
+                url: 'add-review/',
+                type: 'post',
+                data: {
+                    'text': $('#text-handler').val(),
+                },
+                success: reviewShow,
+            })
+            textarea.value = ''
+            alert_text.value = ''
+        }
+    }
+
+    $(document).ready(function () {
+        // Click event handler for star icons
+        $('.star-icon').click(function () {
+            // Get the index of the clicked star
+            var starIndex = $(this).index() + 1;
+            $('#rating').val(starIndex); // Set the rating value
+            updateStars(starIndex); // Update the star icons
+        });
+
+        // Click event handler for the "Simpan" button
+        $('#save-review').click(function () {
+            // Get the review text and rating
+            var reviewText = $('#text-handler').val();
+            var rating = $('#rating').val();
+
+            // Check if review text is not empty
+            if (reviewText.trim() === '') {
+                $("#alert-text").text("Review cannot be empty!");
+                return;
+            }
+
+            // Send an AJAX request to save the review
+            $.post({
+                url: 'add-review/',
+                type: 'post',
+                data: {
+                    text: reviewText,
+                    rating: rating
+                },
+                success: function (response) {
+                    if (response.success) {
+                        // Clear the alert text
+                        $("#alert-text").text("");
+                        // Close the modal
+                        $('#modalAddReview').modal('toggle');
+                        // Update the review section with the newly added review
+                        updateReviews();
+                    } else {
+                        $("#alert-text").text("Error while saving the review.");
+                    }
+                }
+            });
+        });
+    });
+
+    // Function to update the review section with the newly added review
+    function updateReviews() {
+        $('#review-data').empty();
+        $.getJSON("./show-json", function (result) {
+            for (let i = 0; i < result.length; i++) {
+                $('#review-data').append(
+                    `<div class="card">
+                        <div class="card-body">
+                            <div class="d-flex gap-3 flex-row">
+                                <h5 class="card-title font-weight-bold">${result[i].fields.username}</h5>
+                                <p class="card-text mx-3"><small class="text-muted">${result[i].fields.email}</small></p>
+                            </div>
+                            <div class="rating">
+                                <!-- Display stars based on the rating value -->
+                                ${getStarIcons(result[i].fields.rating)}
+                            </div>
+                            <p class="card-text">${result[i].fields.text}</p>
+                            <p class="card-text"><small class="text-muted">${result[i].fields.created_at}</small></p>
+                        </div>
+                    </div>`
+                )
+            }
+        });
+    }
+
+    // Function to generate star icons based on the rating value
+    function getStarIcons(rating) {
+        var starIcons = '';
+        for (var i = 1; i <= 5; i++) {
+            if (i <= rating) {
+                starIcons += '<span class="fa fa-star checked star-icon"></span>';
+            } else {
+                starIcons += '<span class="fa fa-star star-icon"></span>';
+            }
+        }
+        return starIcons;
+    }
+
+    // Initial call to populate reviews
+    updateReviews();
+
+    $('#tambah-btn').click(function () {
+        console.log('ABC');
+        $('#modalAddReview').modal('toggle');
+        $("#alert-text").text("");
+        textarea.value = ''
+    });
+
+    
+
+    function reviewShow() {
+        $('#review-data').empty();
+        $.getJSON("./show-json", function (result) {
+            for (let i = 0; i < result.length; i++) {
+                console.log(result[i].fields.email);
+                $('#review-data').append(
+                    `<div class="card">
+                        <div class="card-body">
+                            <div class="d-flex gap-3 flex-row">
+                                <h5 class="card-title font-weight-bold">${result[i].fields.username}</h5>
+                                <p class="card-text mx-3"><small class="text-muted">${result[i].fields.email}</small></p>
+                            </div>
+                            
+                            <p class="card-text">${result[i].fields.text}</p>
+                            <p class="card-text"><small class="text-muted">${result[i].fields.created_at}</small></p>
+                        </div>
+                    </div>`
+                )
+            }
+        });
+    }
+
+    reviewShow();
+
+</script>
+
 </html>
