@@ -292,6 +292,7 @@ https://templatemo.com/tm-569-edu-meeting
     <script src="{% static 'js/slick-slider.js' %}"></script>
     <script src="{% static 'js/custom.js' %}"></script>
     <script>
+      var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
       function addBookmark(bookId) {
         // Lakukan permintaan Ajax untuk menambahkan buku ke bookmark
         fetch('/add_bookmark/', {
@@ -449,49 +450,50 @@ https://templatemo.com/tm-569-edu-meeting
 
 
         document.getElementById('review-button').addEventListener('click', function() {
-            this.classList.add('blue-button');
-            setTimeout(() => {
-                this.classList.remove('blue-button');
-            }, 1000); 
+          this.classList.add('blue-button');
+          setTimeout(() => {
+            this.classList.remove('blue-button');
+          }, 1000); 
         });
 
         document.querySelector('button[onclick="showPopupForm()"]').addEventListener('click', function() {
-            this.classList.add('blue-button');
-            setTimeout(() => {
-                this.classList.remove('blue-button');
-            }, 1000); 
+          this.classList.add('blue-button');
+          setTimeout(() => {
+            this.classList.remove('blue-button');
+          }, 1000); 
         });
 
         document.getElementById('bookmark-button').addEventListener('click', function () {
-        // Simpan referensi ke tombol
-        var bookmarkButton = this;
+          console.log("Bookmark button clicked");
+          // Simpan referensi ke tombol
+          var bookmarkButton = this;
 
-        // Mengambil ID buku dari atribut data-bookid
-        const bookId = bookmarkButton.getAttribute('data-bookid');
+          // Mengambil ID buku dari atribut data-bookid
+          const bookId = bookmarkButton.getAttribute('data-bookid');
 
-        // Lakukan permintaan Ajax untuk menyimpan buku ke bookmark
-        fetch('/add_bookmark/', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCookie('csrftoken'),
-          },
-          body: JSON.stringify({ book_id: bookId }),
-        })
-        .then(response => {
-          if (response.ok) {
-            // Sukses menambahkan ke bookmark, Anda dapat memberikan pesan sukses atau mengubah tampilan tombol jika diperlukan
-            bookmarkButton.innerText = "Bookmarked";
-            bookmarkButton.disabled = true; // Optional: Menonaktifkan tombol setelah ditambahkan ke bookmark
-          } else {
-            // Gagal menambahkan ke bookmark, Anda dapat memberikan pesan kesalahan.
-          }
-        })
-        .catch(error => {
-          console.error('Error:', error);
-          // Tangani kesalahan jaringan atau lainnya di sini.
+          // Lakukan permintaan Ajax untuk menyimpan buku ke bookmark
+          fetch('/add_bookmark/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': getCookie('csrftoken'),
+            },
+            body: JSON.stringify({ book_id: bookId }),
+          })
+          .then(response => {
+            if (response.ok) {
+              // Sukses menambahkan ke bookmark, Anda dapat memberikan pesan sukses atau mengubah tampilan tombol jika diperlukan
+              bookmarkButton.innerText = "Bookmarked";
+              bookmarkButton.disabled = true; // Optional: Menonaktifkan tombol setelah ditambahkan ke bookmark
+            } else {
+              // Gagal menambahkan ke bookmark, Anda dapat memberikan pesan kesalahan.
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            // Tangani kesalahan jaringan atau lainnya di sini.
+          });
         });
-      });
     </script>
   </body>
 </body>
