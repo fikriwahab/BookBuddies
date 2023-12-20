@@ -1,0 +1,100 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<section class="mt-5">
+    <div class="mb-4 d-flex justify-content-between align-items-center">
+        <div>
+            <button onclick="history.back()" class="btn btn-secondary d-flex justify-content-center align-items-center">
+                <i class="bi bi-chevron-left my-auto fs-6 me-2"></i>Back
+            </button>
+        </div>
+        <h1>Add Book</h1>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data" class="row">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+                
+                <div class="form-group mb-3 col-md-6">
+                    <label for="{{ form.title.id_for_label }}">Title:</label>
+                    {{ form.title }}
+                    {{ form.title.errors }}
+                </div>
+                
+                <div class="form-group mb-3 col-md-6">
+                    <label for="{{ form.authors.id_for_label }}">Authors:</label>
+                    {{ form.authors }}
+                    {{ form.authors.errors }}
+                </div>
+                
+                <div class="form-group mb-3 col-md-6">
+                    <label for="{{ form.average_rating.id_for_label }}">Average Rating:</label>
+                    {{ form.average_rating }}
+                    {{ form.average_rating.errors }}
+                </div>
+                
+                <div class="form-group mb-3 col-md-6">
+                    <label for="{{ form.isbn.id_for_label }}">ISBN:</label>
+                    {{ form.isbn }}
+                    {{ form.isbn.errors }}
+                </div>
+                
+                <div class="form-group mb-3 col-md-6">
+                    <label for="{{ form.isbn13.id_for_label }}">ISBN 13:</label>
+                    {{ form.isbn13 }}
+                    {{ form.isbn13.errors }}
+                </div>
+                
+                <div class="form-group mb-3 col-md-6">
+                    <label for="{{ form.language_code.id_for_label }}">Language Code:</label>
+                    {{ form.language_code }}
+                    {{ form.language_code.errors }}
+                </div>
+                
+                <div class="form-group mb-3 col-md-6">
+                    <label for="{{ form.num_pages.id_for_label }}">Number of Pages:</label>
+                    {{ form.num_pages }}
+                    {{ form.num_pages.errors }}
+                </div>
+                
+                <div class="form-group mb-3 col-md-6">
+                    <label for="{{ form.ratings_count.id_for_label }}">Rating Count:</label>
+                    {{ form.ratings_count }}
+                    {{ form.ratings_count.errors }}
+                </div>
+                
+                <div class="form-group mb-3 col-md-6">
+                    <label for="{{ form.text_review_count.id_for_label }}">Text Review Count:</label>
+                    {{ form.text_review_count }}
+                    {{ form.text_review_count.errors }}
+                </div>
+                
+                <div class="form-group mb-3 col-md-6">
+                    <label for="{{ form.publication_date.id_for_label }}">Publication Date:</label>
+                    {{ form.publication_date }}
+                    {{ form.publication_date.errors }}
+                </div>
+                
+                <div class="form-group mb-3 col-md-6">
+                    <label for="{{ form.publisher.id_for_label }}">Publisher:</label>
+                    {{ form.publisher }}
+                    {{ form.publisher.errors }}
+                </div>
+                
+                <div class="form-group mb-3 col-md-6">
+                    <label for="{{ form.cover.id_for_label }}">Cover:</label>
+                    {{ form.cover }}
+                    {{ form.cover.errors }}
+                </div>
+                
+                <div>
+                    <button type="submit" class="btn btn-dark"><i class="bi bi-save-fill my-auto fs-6 me-2"></i>Save</button>
+                </div>
+            </form>
+            
+        </div>
+    </div>
+</section>
+
+{% endblock content %}
