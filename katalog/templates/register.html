@@ -1,0 +1,123 @@
+{% extends "base.html" %} {% block content %}
+
+<section class="vh-100" style="background-color: #153147">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col col-xl-10">
+        <div class="card" style="border-radius: 1rem">
+          <div class="row g-0">
+            <div class="col-md-6 col-lg-5 d-none d-md-block">
+              <img
+                src="https://images.unsplash.com/photo-1568667256549-094345857637?auto=format&fit=crop&q=80&w=2815&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                alt="login form"
+                class="img-fluid"
+                style="border-radius: 1rem 0 0 1rem; height: 100%"
+              />
+            </div>
+            <div class="col-md-6 col-lg-7 d-flex align-items-center">
+              <div class="card-body p-4 p-lg-5 text-black">
+                <form method="post" action="{% url 'katalog:register' %}">
+                  {% csrf_token %} {% if messages %}
+                  <div
+                    class="alert alert-danger alert-dismissible fade show d-flex align-items-center"
+                    role="alert"
+                  >
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <div>
+                      {% for message in messages %} {{ message }} {% endfor %}
+                    </div>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="alert"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  {% endif %}
+                  <div class="d-flex align-items-center mb-3 pb-1">
+                    <span class="h1 fw-bold mb-0">BookBuddies</span>
+                  </div>
+
+                  <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px">
+                    Create your own account
+                  </h5>
+
+                  <div class="form-outline mb-4">
+                    <label class="form-label" for="email">Email</label>
+                    <input
+                      type="email"
+                      name="email"
+                      id="email"
+                      class="form-control form-control-lg"
+                      required
+                    />
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <label class="form-label" for="full_name">Full Name</label>
+                    <input
+                      type="text"
+                      name="full_name"
+                      id="full_name"
+                      class="form-control form-control-lg"
+                      required
+                    />
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <label class="form-label" for="username">Username</label>
+                    <input
+                      type="text"
+                      name="username"
+                      id="username"
+                      class="form-control form-control-lg"
+                      required
+                    />
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <label class="form-label" for="password">Password</label>
+                    <input
+                      type="password"
+                      name="password1"
+                      id="password1"
+                      class="form-control form-control-lg"
+                      required
+                    />
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <label class="form-label" for="password">Confirm Password</label>
+                    <input
+                      type="password"
+                      name="password2"
+                      id="password2"
+                      class="form-control form-control-lg"
+                      required
+                    />
+                  </div>
+
+                  <div class="pt-1 mb-2">
+                    <button
+                      type="submit"
+                      class="btn btn-dark btn-block w-100"
+                      type="button"
+                    >
+                      Register
+                    </button>
+                  </div>
+
+                  <p class="mb-5 mt-4 pb-lg-2 text-center">
+                    Already have an account?
+                    <a href="{% url 'katalog:login' %}" style="color: #393f81">Login here</a>
+                  </p>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

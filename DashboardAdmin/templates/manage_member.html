@@ -1,0 +1,105 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<section class="mt-5">
+    <div class="mb-4 d-flex justify-content-between align-items-center">
+        <div>
+            <a href="{% url 'DashboardAdmin:dashboard' %}" class="btn btn-secondary d-flex justify-content-center align-items-center">
+                <i class="bi bi-chevron-left my-auto fs-6 me-2"></i>Back
+            </a>
+        </div>
+        <h1>Manage Member</h1>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between mb-3">
+                <div></div>
+                
+            </div>
+            <div class="table-responsive rounded">
+                <table class="table table-bordered table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>No.</th>
+                            <th>Username</th>
+                            <th>Created At</th>
+                            <th>Borrowed Books</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for member in member_list %}
+                        <tr id="bookRow{{member.id}}">
+                            <th>{{ forloop.counter }}</th>
+                            <td>{{ member.username }}</td>
+                            <td>{{ member.join_date }}</td>
+                            <td>
+                                {% for book in member.borrowed_books %}
+                                    {{ book.title }}
+                                {% endfor %}
+                            </td>
+                            <td>
+
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                    data-bs-target="#confirmDeleteModal{{ forloop.counter0 }}">Delete</button>
+
+                                <div class="modal fade" id="confirmDeleteModal{{ forloop.counter0 }}" tabindex="-1"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">{{ member.username }}</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Are you sure you want to delete member named {{ member.username }}?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">No, Cancel</button>
+                                                <button type="button" class="btn btn-danger"
+                                                    data-bs-dismiss="modal" onclick="deleteMember('{{member.id}}')" data-book-id="{{ book.id }}">Yes, sure</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    $(document).ready(function () {
+
+    });
+    function deleteBook(bookId) {
+        $.ajax({
+            type: 'POST',
+            url: `{% url 'DashboardAdmin:delete_member' 123 %}`.replace('123', bookId),  // Replace with your URL
+            data: {
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function (response) {
+                console.log(response);
+                if (response.success) {
+            
+                    $(`#bookRow${bookId}`).remove();
+                    $('#confirmDeleteModal').modal('hide');
+                } else {
+                    console.log("error")
+                }
+            },
+            error: function (error) {
+                console.log(error)
+            }
+        });
+    }
+</script>
+
+{% endblock content %}

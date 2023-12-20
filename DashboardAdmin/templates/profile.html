@@ -1,0 +1,83 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block content %}
+<section class="profile-section mt-5">
+    <div class="container">
+        <div class="mb-4 d-flex justify-content-between align-items-center">
+            <div>
+                <button onclick="history.back()" class="btn btn-secondary d-flex justify-content-center align-items-center">
+                    <i class="bi bi-chevron-left my-auto fs-6 me-2"></i>Back
+                </button>
+            </div>
+            <h1>Profile</h1>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex flex-column align-items-center justify-content-center">
+                            <img src="http://www.listercarterhomes.com/wp-content/uploads/2013/11/dummy-image-square.jpg" class="rounded-circle text-white d-flex justify-content-center align-items-center mb-2 avatar" style="width:120px; height:120px; font-size: 46pt" />
+                            <h5>{{ user.first_name }}{{ user.last_name }}</h1>
+                            <h6 class="text-muted">@{{ user.username }}</h6>
+                            <button id="btn-edit" class="btn btn-danger">Edit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <form action="" method="post" id="profile-form">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-12 mb-3">
+                                    <div class="">
+                                        <strong class="">First Name</strong>
+                                        <input type="text" name="first_name" value="{{ user.first_name }}" class="form-control" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <div class="">
+                                        <strong class="">Last Name</strong>
+                                        <input type="text" name="last_name" value="{{ user.last_name }}" class="form-control" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <div class="">
+                                        <strong class="">Username</strong>
+                                        <input type="text" name="username" value="{{ user.username }}" class="form-control" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <div class="">
+                                        <strong class="">Email</strong>
+                                        <input type="text" name="email" value="{{ user.email }}" class="form-control" readonly>
+                                    </div>
+                                </div> 
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    $(document).ready(function () {
+        $('#btn-edit').on("click", function () {
+            $('#profile-form input').each(function () {
+                if ($(this).is('[readonly]')) {
+                    $(this).removeAttr('readonly');
+                    $('#btn-edit').text('Save');
+                } else {
+                    $(this).attr('readonly', true);
+                    $('#btn-edit').text('Edit');
+                }
+            });
+        });
+    });
+</script>
+
+{% endblock content %}
