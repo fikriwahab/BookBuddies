@@ -1,0 +1,58 @@
+{% load static %}
+
+<nav class="navbar navbar-expand-lg navbar-light shadow-sm px-3">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'Dashboard_Member:dashboard' %}">Logo</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-md-auto mb-2 mb-lg-0 d-block d-lg-flex align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'Dashboard_Member:borrowed_books' %}">Borrowed Books</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                        data-bs-display="static" aria-expanded="false">
+                        <img src="http://www.listercarterhomes.com/wp-content/uploads/2013/11/dummy-image-square.jpg"
+                            alt="#" class="rounded-circle" style="width: 40px; height: 40px;">
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="navbarDropdown">
+                        <li><span class="px-3">{{ user.username }}</span></li>
+                        <li><span class="px-3 text-muted">{{ user.email }}</span></li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li><a class="dropdown-item" href="{% url 'Dashboard_Member:profile' %}">Profile</a></li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li><button class="dropdown-item" data-bs-toggle="modal"
+                                data-bs-target="#logoutModal">Logout</button></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Logout Confirmation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to logout?
+            </div>
+            <div class="modal-footer">
+                <a href="{% url 'Dashboard_Member:logout' %}" class="btn btn-primary">Yes, Sure</a>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="{% static 'js/theme.js' %}"></script>

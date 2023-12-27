@@ -22,7 +22,8 @@ urlpatterns = [
     # path('admin/', admin.site.urls),
     path('admin/', include('DashboardAdmin.urls')),
     path('detail/', include('HalamanInformasiBuku.urls')), 
-    path('review/', include('halamanreview.urls')),  # Integrasikan HalamanInformasiBuku dengan URL utama
+    path('review/', include('HalamanReview.urls')),  # Integrasikan HalamanInformasiBuku dengan URL utama
+    path('auth/', include('authentication.urls')),
     # path('login/', views.login_view, name='login'),
     # path('logout/', views.logout_view, name='logout'),
     # path('register/', views.register_view, name='register'),
