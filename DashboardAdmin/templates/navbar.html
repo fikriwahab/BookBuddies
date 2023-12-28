@@ -38,10 +38,10 @@
         </div>
     </div>
 </nav>
-{% elif user.is_superuser is False and user.is_authenticated %}
+{% else %}
 <nav class="navbar navbar-expand-lg navbar-light shadow-sm px-3">
     <div class="container-fluid">
-        <a class="navbar-brand" href="{% url 'DashboardAdmin:dashboard' %}">Logo</a>
+        <a class="navbar-brand" href="{% url 'dashboard_member:dashboard' %}">Logo</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -50,10 +50,10 @@
             <ul class="navbar-nav ms-md-auto mb-2 mb-lg-0 d-block d-lg-flex align-items-center">
                 <li class="nav-item">
                     <a class="nav-link" aria-current="page"
-                        href="{% url 'DashboardAdmin:bookmarks' %}">Bookmarks</a>
+                        href="{% url 'dashboard_member:bookmarks' %}">Bookmarks</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'DashboardAdmin:recommended' %}">Recommended</a>
+                    <a class="nav-link" href="{% url 'dashboard_member:recommended' %}">Recommended</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
@@ -67,8 +67,8 @@
                         <li>
                             <hr class="dropdown-divider" />
                         </li>
-                        <li><a class="dropdown-item" href="{% url 'DashboardAdmin:profile' %}">Profile</a></li>
-                        <li><a class="dropdown-item" href="#">Dashboard</a></li>
+                        <li><a class="dropdown-item" href="{% url 'dashboard_member:profile' %}">Profile</a></li>
+                        <!-- <li><a class="dropdown-item" href="{% url 'DashboardAdmin:dashboard' %}">Dashboard</a></li> -->
                         <li>
                             <hr class="dropdown-divider" />
                         </li>
@@ -79,28 +79,7 @@
             </ul>
         </div>
     </div>
-</nav>
-{% else %}
-<nav class="navbar navbar-expand-lg navbar-light shadow-sm px-3">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="{% url 'DashboardAdmin:dashboard' %}">Logo</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 d-lg-flex align-items-center">
-                <li class="nav-item">
-                    <a class="nav-link" aria-current="page"
-                        href="{% url 'katalog:login' %}">Login</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'katalog:register' %}">Register</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+</nav>>
 
 {% endif %}
 
